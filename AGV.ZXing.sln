@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AGV.ZXing", "AGV.ZXing\AGV.ZXing.csproj", "{EEA3C6A2-DB10-4265-A353-D01FF46E0DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXingLibTest", "ZXingLibTest\ZXingLibTest.csproj", "{3D4DD512-47A9-486F-9930-D950D0754A3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEA3C6A2-DB10-4265-A353-D01FF46E0DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA3C6A2-DB10-4265-A353-D01FF46E0DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA3C6A2-DB10-4265-A353-D01FF46E0DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA3C6A2-DB10-4265-A353-D01FF46E0DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D4DD512-47A9-486F-9930-D950D0754A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4DD512-47A9-486F-9930-D950D0754A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4DD512-47A9-486F-9930-D950D0754A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4DD512-47A9-486F-9930-D950D0754A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

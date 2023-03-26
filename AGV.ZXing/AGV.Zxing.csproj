@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.IO" Version="4.3.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="ZXing.Net.Bindings.ImageSharp.V3" Version="0.16.15" />
+    <Reference Include="OutSystems.Model.ExternalLibraries.SDK.dll"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources/zxing.png" />
+    <EmbeddedResource Include="resources/qr_code.png" />
+    <EmbeddedResource Include="resources/qr_code_scanner.png" />
+  </ItemGroup>
+
+</Project>

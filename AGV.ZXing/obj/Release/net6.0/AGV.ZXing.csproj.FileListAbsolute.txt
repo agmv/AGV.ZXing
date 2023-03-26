@@ -1,0 +1,14 @@
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/AGV.ZXing.deps.json
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/AGV.ZXing.dll
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/AGV.ZXing.pdb
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/OutSystems.Model.ExternalLibraries.SDK.dll
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.csproj.AssemblyReference.cache
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.GeneratedMSBuildEditorConfig.editorconfig
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.AssemblyInfoInputs.cache
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.AssemblyInfo.cs
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.csproj.CoreCompileInputs.cache
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.csproj.CopyComplete
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.dll
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/refint/AGV.ZXing.dll
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/AGV.ZXing.pdb
+/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/Release/net6.0/ref/AGV.ZXing.dll
