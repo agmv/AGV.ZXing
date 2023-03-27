@@ -1,0 +1,7 @@
+# Ignore build output of PS
+.DS_Store
+.vscode/settings.json
+AGV.ZXing/obj
+AGV.ZXing/bin
+ZXingLibTest/obj
+ZXingLibTest/bin

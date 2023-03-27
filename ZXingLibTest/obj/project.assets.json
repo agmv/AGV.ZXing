@@ -1020,7 +1020,7 @@
           }
         }
       },
-      "AGV.ZXing/1.0.0": {
+      "AGV.Zxing/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
@@ -1030,10 +1030,10 @@
           "ZXing.Net.Bindings.ImageSharp.V3": "0.16.15"
         },
         "compile": {
-          "bin/placeholder/AGV.ZXing.dll": {}
+          "bin/placeholder/AGV.Zxing.dll": {}
         },
         "runtime": {
-          "bin/placeholder/AGV.ZXing.dll": {}
+          "bin/placeholder/AGV.Zxing.dll": {}
         }
       }
     }
@@ -4126,15 +4126,15 @@
         "zxing.net.bindings.imagesharp.v3.nuspec"
       ]
     },
-    "AGV.ZXing/1.0.0": {
+    "AGV.Zxing/1.0.0": {
       "type": "project",
-      "path": "../AGV.ZXing/AGV.ZXing.csproj",
-      "msbuildProject": "../AGV.ZXing/AGV.ZXing.csproj"
+      "path": "../AGV.ZXing/AGV.Zxing.csproj",
+      "msbuildProject": "../AGV.ZXing/AGV.Zxing.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "AGV.ZXing >= 1.0.0",
+      "AGV.Zxing >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.3.2",
       "NUnit >= 3.13.3",
       "NUnit.Analyzers >= 3.5.0",
@@ -4168,8 +4168,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj": {
-              "projectPath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj"
+            "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj": {
+              "projectPath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj"
             }
           }
         }

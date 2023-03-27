@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj": {}
+    "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj": {}
   },
   "projects": {
-    "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj": {
+    "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj",
-        "projectName": "AGV.ZXing",
-        "projectPath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj",
+        "projectUniqueName": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj",
+        "projectName": "AGV.Zxing",
+        "projectPath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj",
         "packagesPath": "/Users/agv/.nuget/packages/",
         "outputPath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/obj/",
         "projectStyle": "PackageReference",

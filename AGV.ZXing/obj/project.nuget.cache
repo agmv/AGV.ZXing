@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qZU+J6xxvLW/cl/XWpSNlN+PRbhLrYS6EkDZlC821LM5GF32tmm87Qj4h7KMRG9A9M647vJAxn3SH6ZqJWyfTw==",
+  "dgSpecHash": "aCAG/Y8m3LMisxG13ooeg8lW3ZCIkQ6r4WQWWbkS9p2UnNOZ/xOxi1vTiHUeTlL07L1pVYdRAR4Vu+oLHQR83Q==",
   "success": true,
-  "projectFilePath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.ZXing.csproj",
+  "projectFilePath": "/Users/agv/vscode/AGV.ZXing/AGV.ZXing/AGV.Zxing.csproj",
   "expectedPackageFiles": [
     "/Users/agv/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/Users/agv/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",
