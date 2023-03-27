@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "ZXingLibTest/1.0.0": {
         "dependencies": {
-          "AGV.Zxing": "1.0.0",
+          "AGV.ZXing": "1.0.0",
           "Microsoft.NET.Test.Sdk": "17.3.2",
           "NUnit": "3.13.3",
           "NUnit.Analyzers": "3.5.0",
@@ -681,7 +681,7 @@
           }
         }
       },
-      "AGV.Zxing/1.0.0": {
+      "AGV.ZXing/1.0.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
           "System.IO": "4.3.0",
@@ -689,7 +689,7 @@
           "ZXing.Net.Bindings.ImageSharp.V3": "0.16.15"
         },
         "runtime": {
-          "AGV.Zxing.dll": {}
+          "AGV.ZXing.dll": {}
         }
       },
       "OutSystems.Model.ExternalLibraries.SDK/1.0.0.0": {
@@ -1058,7 +1058,7 @@
       "path": "zxing.net.bindings.imagesharp.v3/0.16.15",
       "hashPath": "zxing.net.bindings.imagesharp.v3.0.16.15.nupkg.sha512"
     },
-    "AGV.Zxing/1.0.0": {
+    "AGV.ZXing/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

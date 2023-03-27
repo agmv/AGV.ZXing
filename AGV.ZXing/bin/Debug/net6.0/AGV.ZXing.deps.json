@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "AGV.Zxing/1.0.0": {
+      "AGV.ZXing/1.0.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
           "System.IO": "4.3.0",
@@ -15,7 +15,7 @@
           "OutSystems.Model.ExternalLibraries.SDK": "1.0.0.0"
         },
         "runtime": {
-          "AGV.Zxing.dll": {}
+          "AGV.ZXing.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
@@ -95,7 +95,7 @@
     }
   },
   "libraries": {
-    "AGV.Zxing/1.0.0": {
+    "AGV.ZXing/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

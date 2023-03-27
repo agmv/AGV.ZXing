@@ -1,7 +1,0 @@
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/AGV.ZXing.dll
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/AGV.ZXing.deps.json
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/AGV.ZXing.pdb
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/SixLabors.ImageSharp.dll
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/zxing.dll
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/ZXing.ImageSharp.V3.dll
-/Users/agv/vscode/AGV.ZXing/AGV.ZXing/bin/Release/net6.0/publish/OutSystems.Model.ExternalLibraries.SDK.dll
