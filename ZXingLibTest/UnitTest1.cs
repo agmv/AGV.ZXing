@@ -183,7 +183,7 @@ public class Tests
     [Category("Encode")]
     public void TestEncode_1D(string contents, string format, bool gS1Format = false)
     {
-        var bytes = z.Encode(contents, format, 200, 200, 10, false, false, gS1Format, "UTF-8", null, null);
+        var bytes = z.Encode(contents, format, 200, 200, 10, false, false, gS1Format, "UTF-8", null, null, null);
         var barcodes = z.Decode(bytes, format);
         var b = barcodes.First();
         Assert.That(contents, Is.EqualTo(b.value));
@@ -200,10 +200,22 @@ public class Tests
     [Category("Encode")]
     public void TestEncode_2D(string contents, string format, string? ecl = null)
     {
-        var bytes = z.Encode(contents, format, 200, 200, 10, false, false, false, "UTF-8", ecl, null);
+        var bytes = z.Encode(contents, format, 200, 200, 10, false, false, false, "UTF-8", ecl, null, null);
         var barcodes = z.Decode(bytes, format);
         var b = barcodes.First();
         Assert.That(contents, Is.EqualTo(b.value));
     }
-    
+
+    [Test]
+    [TestCase("Q")]
+    [TestCase("H")]
+    [Category("Encode")]
+    public void TestEncode_Overlay(string ecl) {
+        const string Actual = "https://www.outsystems.com";
+        var bytes = z.Encode(Actual, "QR_CODE", 330, 330, 0, false, false, false, "UTF-8", ecl, null, loadResource("ZXingLibTest.resources.osring.png"));
+        var barcodes = z.Decode(bytes, "QR_CODE");
+        var b = barcodes.First();        
+        Assert.That(Actual, Is.EqualTo(b.value));
+
+    }
 }

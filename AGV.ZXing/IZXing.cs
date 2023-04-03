@@ -38,6 +38,8 @@ namespace AGV.ZXing {
             For PDF417 it is integer between 0 and 8")]
             string? ecl = null,
             [OSParameter(DataType = OSDataType.Integer, Description = "Specifies the exact version of QR code to be encoded.")]
-            int? qRCodeVersion = null);
+            int? qRCodeVersion = null,
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
     }
 }

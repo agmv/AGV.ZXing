@@ -6,6 +6,8 @@ using ZXing.Common;
 using ZXing.ImageSharp.Rendering;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Processors.Drawing;
 
 namespace AGV.ZXing {
 
@@ -38,7 +40,7 @@ namespace AGV.ZXing {
         }
 
 
-        public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, bool noPadding, string? encoding, string? ecl, int? qRCodeVersion) {
+        public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage) {
             var f = Enum.Parse<BarcodeFormat>(format);
             if ((f == BarcodeFormat.EAN_13 || f == BarcodeFormat.UPC_A) && (margin < 6)) {
                 throw new Exception("EAN-13 and UPC-A codes should have a margin greater than 6 to ensure barcode can be scanned properly.");
@@ -65,8 +67,32 @@ namespace AGV.ZXing {
             var writer = new BarcodeWriter<SixLabors.ImageSharp.Formats.Png.PngFormat>{ Format = f, Options = options };            
             var barcode = writer.Encode(contents);
             var render = new ImageSharpRenderer<Rgba32>();
+            var image = render.Render(barcode, f, contents);
+            
+            if (f == BarcodeFormat.QR_CODE && overlayImage != null) {
+                var overlay = Image.Load(new MemoryStream(overlayImage));
+                
+                //Check if overlay coverage on top of QR code does not invalid it
+                var ratio = (overlay.Width * overlay.Height) / (width * height * 1.0);
+                /*7% (L), 15 % (M), 25% (Q), 30% (H) of error correction were a error correction of level H should result in a QRCode that are still valid even when it�s 30% obscured */
+                if (ecl == "H" && ratio > 0.3)
+                    throw new Exception("With ErrorCorrectionLevel.H the maximum overlap of the QR code is 30%. Choose a smaller overlay image.");
+                if (ecl == "Q" && ratio > 0.25)
+                    throw new Exception("With ErrorCorrectionLevel.Q the maximum overlap of the QR code is 25%. Choose a smaller overlay image or a higher error correction level.");
+                if (ecl == "M" && ratio > 0.15)
+                    throw new Exception("With ErrorCorrectionLevel.M the maximum overlap of the QR code is 15%. Choose a smaller overlay image or a higher error correction level.");
+                if (ecl == "L" && ratio > 0.07)
+                    throw new Exception("With ErrorCorrectionLevel.L the maximum overlap of the QR code is 7%. Choose a smaller overlay image or a higher error correction level.");
+                
+                var deltaWidth = width - overlay.Width;
+                var deltaHeight = height - overlay.Height;
+                var size = new Size(deltaWidth/2,deltaHeight/2);
+                overlay.Mutate( x => x.Resize(new Size(deltaWidth/2,deltaHeight/2)));
+                image.Mutate(x => x.DrawImage(overlay,0.5f));
+            }
+
             var stream = new MemoryStream();
-            render.Render(barcode, f, contents).SaveAsPng(stream);
+            image.SaveAsPng(stream);
             return stream.ToArray();
         }
 

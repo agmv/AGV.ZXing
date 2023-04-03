@@ -28,7 +28,8 @@
     <EmbeddedResource Include="resources/pdf417.png" />
     <EmbeddedResource Include="resources/pharmacode.png" />
     <EmbeddedResource Include="resources/rss_14.png" />
-    <EmbeddedResource Include="resources/rss_expanded.png" />    
+    <EmbeddedResource Include="resources/rss_expanded.png" />
+    <EmbeddedResource Include="resources/osring.png" />
   </ItemGroup>
 
 </Project>
