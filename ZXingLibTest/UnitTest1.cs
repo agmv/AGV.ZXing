@@ -1,4 +1,4 @@
-using AGV.ZXing;
+using System;
 using System.IO;
 using System.Reflection;
 using ZXing;
@@ -10,9 +10,12 @@ namespace AGV.ZXing.Tests;
 public class Tests
 {
     ZXingLib z = new ZXingLib();
+    byte[] overlay = new byte[]{};
     
     [SetUp]
-    public void Setup() {}
+    public void Setup() {
+        overlay = loadResource("ZXingLibTest.resources.osring.png");
+    }
 
     [TearDown]
     public void TearDown(){}
@@ -162,7 +165,7 @@ public class Tests
     private byte[] loadResource(string resourceName) {
         Stream? s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
         if (s == null)
-            throw new System.Exception();
+            throw new Exception();
         var ms = new MemoryStream();
         s.CopyTo(ms);
         return ms.ToArray();        
@@ -211,11 +214,88 @@ public class Tests
     [TestCase("H")]
     [Category("Encode")]
     public void TestEncode_Overlay(string ecl) {
-        const string Actual = "https://www.outsystems.com";
-        var bytes = z.Encode(Actual, "QR_CODE", 330, 330, 0, false, false, false, "UTF-8", ecl, null, loadResource("ZXingLibTest.resources.osring.png"));
+        var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, false, false, false, "UTF-8", ecl, null, this.overlay);
         var barcodes = z.Decode(bytes, "QR_CODE");
         var b = barcodes.First();        
-        Assert.That(Actual, Is.EqualTo(b.value));
+        Assert.That("https://www.outsystems.com", Is.EqualTo(b.value));
+    }
 
+    [Test]
+    [TestCase("Event 1", true, 1, "Room A","This is event 1","PUBLIC","John Doe",5,true)]
+    [TestCase("Event 2", false, 45, "Rua Central Park 2 2A","","PRIVATE","",5,true)]
+    [Category("Extensions")]
+    public void TestEncodeExt_CalendarEvent(string title, bool isAllDay, int duration, string location, string description, string eClass, string organizer, int priority, bool showAsBusy) {
+        var start = DateTime.Now;
+        var end = isAllDay == true ? start.AddDays(duration) : start.AddMinutes(duration);
+        var c = new ZXing.Structures.CalendarEvent(title, isAllDay,start,end,location,description,eClass,organizer,priority,showAsBusy);
+        var bytes = z.EncodeCalendarEvent(c, 330, this.overlay);
+#if DEBUG
+        File.WriteAllBytes($"{ title.Replace(" ","") }.png", bytes);
+#endif
+        Assert.That(true);
+    }
+
+    [Test]
+    [Category("Extensions")]
+    public void TestEncodeExt_Contact() {
+        var c = new ZXing.Structures.Contact("Jane Doe", new Structures.ComposedName("Jane", "Doe"),"ACME","Designer","555 321212", "555 321313", "", "jane.doe@acme.com", "Rua Central Park, 2 2A, 2795-242, Linda-a-Velha, Portugal", "www.ac.me", "Some notes");
+        var bytes = z.EncodeContact(c, false, 200, null);
+#if DEBUG
+        File.WriteAllBytes("contact.png", bytes);
+#endif
+        Assert.That(true);
+    }
+
+    [Test]
+    [Category("Extensions")]
+    public void TestEncodeExt_Email() {
+        var bytes = z.EncodeEmail(@"andre.vieira@outsystems.com", 200, null);
+#if DEBUG
+        File.WriteAllBytes("email.png", bytes);
+#endif
+        Assert.That(true);
+    }
+
+    [Test]
+    [Category("Extensions")]
+    public void TestEncodeExt_Location() {
+        var bytes = z.EncodeLocation("38.7210876","-9.2390245", 200, null);
+#if DEBUG
+        File.WriteAllBytes("location.png", bytes);
+#endif
+        Assert.That(true);
+    }
+
+    [Test]
+    [TestCase("5553344222", false, "call.png")]
+    [TestCase("5553344222", true, "facetime.png")]
+    [Category("Extensions")]
+    public void TestEncodeExt_PhoneNumber(string phoneNumber, bool isFacetime, string path) {
+        var bytes = z.EncodePhoneNumber(phoneNumber, isFacetime, 200, null);
+#if DEBUG
+        File.WriteAllBytes(path, bytes);
+#endif        
+        Assert.That(true);
+    }
+
+    [Test]
+    [Category("Extensions")]
+    public void TestEncodeExt_SMS() {
+        var bytes = z.EncodeSMS("5553322444","This is a message", 200, null);
+#if DEBUG
+        File.WriteAllBytes("sms.png", bytes);
+#endif
+        Assert.That(true);
+    }
+
+    [Test]
+    [Category("Extensions")]
+    public void TestEncodeExt_Wifi() {
+        var w = new Structures.Wifi("SUPERFAST-123","StrongerThanYouThink","WEP",false,"","","","");
+        var bytes = z.EncodeWifi(w, 200, null);
+#if DEBUG
+        File.WriteAllBytes("wifi.png", bytes);
+#endif
+        Assert.That(true);
     }
 }

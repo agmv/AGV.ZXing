@@ -6,11 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ical.Net" Version="4.2.0" />
+    <PackageReference Include="MixERP.Net.VCards" Version="1.0.7" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.IO" Version="4.3.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.ImageSharp.V3" Version="0.16.15" />
-    <Reference Include="OutSystems.Model.ExternalLibraries.SDK.dll"/>
+    <Reference Include="OutSystems.Model.ExternalLibraries.SDK.dll" />
   </ItemGroup>
 
   <ItemGroup>

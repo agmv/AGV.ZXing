@@ -12,7 +12,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
             string? formatHint = null);
 
-        [OSAction(Description = "Generates barcodes with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] Encode(
             [OSParameter(DataType = OSDataType.Text, Description = "Contents to encode as a barcode")]
             string contents,
@@ -41,5 +41,77 @@ namespace AGV.ZXing {
             int? qRCodeVersion = null,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
+
+        [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeCalendarEvent(
+            [OSParameter(Description = "Calendar event to encode as a barcode")]
+            Structures.CalendarEvent calendarEvent,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+
+        [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeContact(
+            [OSParameter(Description = "Contact to encode as a barcode")]
+            Structures.Contact contact,
+            [OSParameter(DataType = OSDataType.Boolean, Description = "Indicates if it uses MECARD format instead of VCARD format")]
+            bool isMeCard,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+        
+        [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeEmail(
+            [OSParameter(DataType = OSDataType.Text, Description = "Email to encode")]
+            string email,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+            
+        [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeLocation(
+            [OSParameter(DataType = OSDataType.Text, Description = "Latitude")]
+            string latitude,
+            [OSParameter(DataType = OSDataType.Text, Description = "Longitude")]
+            string longitude,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+            
+        [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodePhoneNumber(
+            [OSParameter(DataType = OSDataType.Text, Description = "Phone number to encode")]
+            string phoneNumber,
+            [OSParameter(DataType = OSDataType.Boolean, Description = "Indicates if it generates a facetime call")]
+            bool isFacetime,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+            
+        [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeSMS(
+            [OSParameter(DataType = OSDataType.Text, Description = "Phone number")]
+            string phoneNumber,
+            [OSParameter(DataType = OSDataType.Text, Description = "Message")]
+            string message,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+            
+        [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        public byte[] EncodeWifi(
+            [OSParameter(Description = "Wifi data")]
+            Structures.Wifi wifi,
+            [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
+            int size,            
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
+            byte[]? overlayImage = null);
+            
     }
 }

@@ -2,19 +2,21 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using ZXing;
+using ZXing.Rendering;
 using ZXing.Common;
 using ZXing.ImageSharp.Rendering;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Drawing;
+using OutSystems.Model.ExternalLibraries.SDK;
+using AGV.ZXing.Structures;
 
 namespace AGV.ZXing {
 
     public class ZXingLib : IZXingLib
     {
-        public IEnumerable<Structures.Barcode> Decode(byte[] image, string? formatHint) {                        
-
+        public IEnumerable<Structures.Barcode> Decode(byte[] image, string? formatHint) {
+            
             var i = Image.Load<Rgba32>(new MemoryStream(image));            
 
             var reader = new BarcodeReaderGeneric();            
@@ -64,8 +66,16 @@ namespace AGV.ZXing {
             if (f == BarcodeFormat.QR_CODE && qRCodeVersion != null)
                 options.Hints.Add(EncodeHintType.QR_VERSION, qRCodeVersion);
 
-            var writer = new BarcodeWriter<SixLabors.ImageSharp.Formats.Png.PngFormat>{ Format = f, Options = options };            
-            var barcode = writer.Encode(contents);
+            // if (SVG) {
+            //     var w = new BarcodeWriterSvg(){ Format = f, Options = options};
+            //     var b = w.Encode(contents);
+            //     var r = new SvgRenderer();
+            //     var i = r.Render(b, f, contents);
+            //     return System.Text.Encoding.UTF8.GetBytes(i.Content);
+            // }
+
+            var writer = new BarcodeWriter<SixLabors.ImageSharp.Formats.Png.PngFormat>{ Format = f, Options = options };
+            var barcode = writer.Encode(contents);            
             var render = new ImageSharpRenderer<Rgba32>();
             var image = render.Render(barcode, f, contents);
             
@@ -85,15 +95,48 @@ namespace AGV.ZXing {
                     throw new Exception("With ErrorCorrectionLevel.L the maximum overlap of the QR code is 7%. Choose a smaller overlay image or a higher error correction level.");
                 
                 var deltaWidth = width - overlay.Width;
-                var deltaHeight = height - overlay.Height;
-                var size = new Size(deltaWidth/2,deltaHeight/2);
-                overlay.Mutate( x => x.Resize(new Size(deltaWidth/2,deltaHeight/2)));
-                image.Mutate(x => x.DrawImage(overlay,0.5f));
+                var deltaHeight = height - overlay.Height;                
+                image.Mutate(x => x.DrawImage(overlay, new Point(deltaWidth/2,deltaHeight/2), 0.8f));
             }
 
             var stream = new MemoryStream();
             image.SaveAsPng(stream);
             return stream.ToArray();
+        }
+
+        public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null)
+        {
+            return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null)
+        {
+            return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodeEmail(string email,int size,byte[]? overlayImage = null)
+        {
+            return Encode(string.Format("mailto:{0}",email), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null)
+        {
+            return Encode(string.Format("geo:{0},{1}", latitude, longitude), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null)
+        {
+            return Encode(string.Format("{0}{1}", isFacetime?"facetime:":"tel:", phoneNumber), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null)
+        {
+            return Encode(string.Format("smsto:{0}:{1}", phoneNumber, message), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
+        }
+
+        public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null)
+        {
+            return Encode(wifi.ToString(), "QR_CODE", size, size, 0, false, false, false, "UTF-8", "H", null, overlayImage);
         }
 
         protected Structures.Metadata[] convertMetadata(System.Collections.Generic.IDictionary<ResultMetadataType, object> metadata) {
@@ -105,6 +148,13 @@ namespace AGV.ZXing {
                 l.Add(r);
             }
             return l.ToArray();
+        }
+        
+    }
+
+    public static class StringExtension{
+        public static string encodeQRCode(this string s) {
+            return s.Replace(",",@"\,").Replace(";",@"\;").ReplaceLineEndings(@"\n").Replace(@"\",@"\\").Replace(@"""",@"\""").Replace(":",@"\:");
         }
     }
 }
