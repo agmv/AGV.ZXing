@@ -206,7 +206,7 @@ public class Tests
         var bytes = z.Encode(contents, format, 200, 200, 10, false, false, false, "UTF-8", ecl, null, null);
         var barcodes = z.Decode(bytes, format);
         var b = barcodes.First();
-        Assert.That(contents, Is.EqualTo(b.value));
+        Assert.That(b.value, Is.EqualTo(contents));
     }
 
     [Test]
@@ -217,7 +217,7 @@ public class Tests
         var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, false, false, false, "UTF-8", ecl, null, this.overlay);
         var barcodes = z.Decode(bytes, "QR_CODE");
         var b = barcodes.First();        
-        Assert.That("https://www.outsystems.com", Is.EqualTo(b.value));
+        Assert.That(b.value, Is.EqualTo("https://www.outsystems.com"));
     }
 
     [Test]
