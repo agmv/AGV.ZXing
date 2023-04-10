@@ -18,7 +18,13 @@
   <ItemGroup>
     <EmbeddedResource Include="resources/zxing.png" />
     <EmbeddedResource Include="resources/qr_code.png" />
-    <EmbeddedResource Include="resources/qr_code_scanner.png" />
+    <EmbeddedResource Include="resources/contact.png" />
+    <EmbeddedResource Include="resources/email.png" />
+    <EmbeddedResource Include="resources/event.png" />
+    <EmbeddedResource Include="resources/gps.png" />
+    <EmbeddedResource Include="resources/phone.png" />
+    <EmbeddedResource Include="resources/sms.png" />
+    <EmbeddedResource Include="resources/wifi.png" />
   </ItemGroup>
 
 </Project>

@@ -42,7 +42,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
 
-        [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.event.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeCalendarEvent(
             [OSParameter(Description = "Calendar event to encode as a barcode")]
             Structures.CalendarEvent calendarEvent,
@@ -51,7 +51,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
 
-        [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.contact.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeContact(
             [OSParameter(Description = "Contact to encode as a barcode")]
             Structures.Contact contact,
@@ -62,7 +62,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
         
-        [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.email.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeEmail(
             [OSParameter(DataType = OSDataType.Text, Description = "Email to encode")]
             string email,
@@ -71,7 +71,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
             
-        [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.gps.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeLocation(
             [OSParameter(DataType = OSDataType.Text, Description = "Latitude")]
             string latitude,
@@ -82,7 +82,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
             
-        [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodePhoneNumber(
             [OSParameter(DataType = OSDataType.Text, Description = "Phone number to encode")]
             string phoneNumber,
@@ -93,7 +93,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
             
-        [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeSMS(
             [OSParameter(DataType = OSDataType.Text, Description = "Phone number")]
             string phoneNumber,
@@ -104,7 +104,7 @@ namespace AGV.ZXing {
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null);
             
-        [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.qr_code.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+        [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.wifi.png", ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeWifi(
             [OSParameter(Description = "Wifi data")]
             Structures.Wifi wifi,
