@@ -18,6 +18,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources/zxing.png" />
     <EmbeddedResource Include="resources/qr_code.png" />
+    <EmbeddedResource Include="resources/qr_code_scanner.png" />
     <EmbeddedResource Include="resources/contact.png" />
     <EmbeddedResource Include="resources/email.png" />
     <EmbeddedResource Include="resources/event.png" />
