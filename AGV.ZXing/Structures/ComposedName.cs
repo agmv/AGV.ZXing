@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace AGV.ZXing.Structures {
 
-    [OSStructure(Description = "Defines a name by its components")]
+    [OSStructure(Description = "Defines a name by its components", OriginalName = "ComposedName")]
     public struct ComposedName {
-        [OSStructureField(DataType = OSDataType.Text, Description = "First name")]
+        [OSStructureField(Description = "First name", OriginalName = "FirstName")]
         public string firstName;
-        [OSStructureField(DataType = OSDataType.Text, Description = "Last name")]
+        [OSStructureField(Description = "Last name", OriginalName = "LastName")]
         public string lastName;
-        [OSStructureField(DataType = OSDataType.Text, Description = "Middle names")]
+        [OSStructureField(Description = "Middle names", OriginalName = "MiddleNames")]
         public string middleNames;
-        [OSStructureField(DataType = OSDataType.Text, Description = "Name prefix")]
+        [OSStructureField(Description = "Name prefix", OriginalName = "Prefix")]
         public string prefix;
-        [OSStructureField(DataType = OSDataType.Text, Description = "Name suffix")]
+        [OSStructureField(Description = "Name suffix", OriginalName = "Suffix")]
         public string suffix;
 
         public ComposedName(string firstName, string lastName, string middleNames = "", string prefix = "", string suffix = ""):this() {

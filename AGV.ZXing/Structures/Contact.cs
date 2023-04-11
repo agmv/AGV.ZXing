@@ -9,39 +9,39 @@ using System;
 
 namespace AGV.ZXing.Structures {
 
-    [OSStructure(Description = "Defines a this to be shared as a QR code")]
+    [OSStructure(Description = "Defines a this to be shared as a QR code", OriginalName = "Contact")]
     public struct Contact {
-        [OSStructureField(DataType = OSDataType.Text, Description = "Formated name")]
+        [OSStructureField(IsMandatory = true, Description = "Formated name", OriginalName = "FormatedName")]
         public string formatedName;
 
-        [OSStructureField(Description = "Composed name")]
+        [OSStructureField(Description = "Composed name", OriginalName = "ComposedName")]
         public Structures.ComposedName composedName;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Organization")]
+        [OSStructureField(Description = "Organization", OriginalName = "Organization")]
         public string organization;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Title")]
+        [OSStructureField(Description = "Title", OriginalName = "Title")]
         public string title;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Home phone number")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Home phone number", OriginalName = "HomePhoneNumber")]
         public string homePhone;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Work phone number")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Work phone number", OriginalName = "WorkPhoneNumber")]
         public string workPhone;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Mobile phone number")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Mobile phone number", OriginalName = "MobilePhoneNumber")]
         public string mobilePhone;
 
-        [OSStructureField(DataType = OSDataType.Email, Description = "Email")]
+        [OSStructureField(DataType = OSDataType.Email, Description = "Email", OriginalName = "Email")]
         public string email;
 
-        [OSStructureField(DataType = OSDataType.Email, Description = "Address")]
+        [OSStructureField(Description = "Address", OriginalName = "Address")]
         public string address;
 
-        [OSStructureField(DataType = OSDataType.Email, Description = "Website")]
+        [OSStructureField(Description = "Website", OriginalName = "Website")]
         public string website;
 
-        [OSStructureField(DataType = OSDataType.Email, Description = "Notes")]
+        [OSStructureField(Description = "Notes", OriginalName = "Notes")]
         public string notes;
 
         public Contact(string formatedName, ComposedName composedName, string organization, string title, 

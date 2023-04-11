@@ -13,6 +13,7 @@
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.ImageSharp.V3" Version="0.16.15" />
     <PackageReference Include="OutSystems.Model.ExternalLibraries.SDK" Version="1.0.2"/>
+    <PackageReference Include="OutSystems.ExternalLibraries.SDK" Version="1.1.0"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,39 +1,41 @@
 using OutSystems.Model.ExternalLibraries.SDK;
 using System;
 using Ical.Net;
+using Ical.Net.DataTypes;
+using Ical.Net.Serialization;
 
 namespace AGV.ZXing.Structures {
 
-    [OSStructure(Description = "Defines a calendar event to be shared as a QR code")]
+    [OSStructure(Description = "Defines a calendar event to be shared as a QR code", OriginalName = "CalendarEvent")]
     public struct CalendarEvent {
-        [OSStructureField(DataType = OSDataType.Text, Description = "Event title")]
+        [OSStructureField(IsMandatory = true,  Description = "Event title", OriginalName = "Title")]
         public string title;
 
-        [OSStructureField(DataType = OSDataType.Boolean, Description = "Indicates if it is an all day event or not")]
+        [OSStructureField(IsMandatory = true, Description = "Indicates if it is an all day event or not", OriginalName = "IsAllDay")]
         public bool isAllDay;
 
-        [OSStructureField(DataType = OSDataType.DateTime, Description = "Event start date")]
+        [OSStructureField(IsMandatory = true, Description = "Event start date", OriginalName = "StartDateTime")]
         public DateTime startDateTime;
 
-        [OSStructureField(DataType = OSDataType.DateTime, Description = "Event end date")]
+        [OSStructureField(IsMandatory = true, Description = "Event end date", OriginalName = "EndDateTime")]
         public DateTime endDateTime;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Event location")]
+        [OSStructureField(Description = "Event location", OriginalName = "Location")]
         public string? location;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Event description")]
+        [OSStructureField(Description = "Event description", OriginalName = "Description")]
         public string? description;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Event class, e.g. PUBLIC or PRIVATE")]
+        [OSStructureField(Description = "Event class, e.g. PUBLIC or PRIVATE", OriginalName = "Class")]
         public string? eventClass;
 
-        [OSStructureField(DataType = OSDataType.Text, Description = "Event organizaer's name")]
+        [OSStructureField(Description = "Event organizer's name", OriginalName = "Organizer")]
         public string? organizer;
 
-        [OSStructureField(DataType = OSDataType.Integer, Description = "Event priority. Value between 1 and 4 is Low priority, 5 is Medium priority, and between 6 and 9 is High priority.")]
+        [OSStructureField(Description = "Event priority. Value between 1 and 4 is Low priority, 5 is Medium priority, and between 6 and 9 is High priority.", OriginalName = "Priority")]
         public int? priority = 5;
 
-        [OSStructureField(DataType = OSDataType.Boolean, Description = "Show as busy in calendar")]
+        [OSStructureField(Description = "Show as busy in calendar", OriginalName = "ShowAsBusy")]
         public bool? showAsBusy = true;
 
         public CalendarEvent(string title, bool isAllDay, DateTime start, DateTime end, string? location = "", 
@@ -64,22 +66,25 @@ namespace AGV.ZXing.Structures {
         }
 
         public override string ToString() {
+            var start = new CalDateTime(this.startDateTime);
+            var end = new CalDateTime(this.endDateTime);
+            var organizer = this.organizer != "" ? new Organizer { CommonName = this.organizer } : null;
+
             var e = new Ical.Net.CalendarComponents.CalendarEvent {
                 Summary = this.title,
-                Start = new Ical.Net.DataTypes.CalDateTime(this.startDateTime),
-                End = new Ical.Net.DataTypes.CalDateTime(this.endDateTime),
+                Start = start,
+                End = end,
                 Location = this.location,
                 Description = this.description,
                 IsAllDay = this.isAllDay,
                 Class = this.eventClass,
-                Organizer = this.organizer != "" ? new Ical.Net.DataTypes.Organizer { CommonName = this.organizer } : null,
+                Organizer = organizer,
                 Priority = this.priority ?? 5,
                 Transparency = this.showAsBusy == true ? "OPAQUE" : "TRANSPARENT"
             };
-            var c = new Ical.Net.Calendar();
+            var c = new Calendar();
             c.Events.Add(e);
-            var s = new Ical.Net.Serialization.CalendarSerializer();
-            return s.SerializeToString(c);
+            return new CalendarSerializer(c).SerializeToString();
         }
 
     }
