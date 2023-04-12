@@ -103,9 +103,9 @@ namespace AGV.ZXing {
             if (f == BarcodeFormat.QR_CODE && overlayImage != null && overlayImage.Length != 0) {
                 var overlay = Image.Load(new MemoryStream(overlayImage));
                 
-                //Check if overlay coverage on top of QR code does not invalid it
-                var ratio = (overlay.Width * overlay.Height) / (width * height * 1.0);
-                /*7% (L), 15 % (M), 25% (Q), 30% (H) of error correction were a error correction of level H should result in a QRCode that are still valid even when it�s 30% obscured */
+                //Check overlay coverage on top of QR code. Too much may lead to barcode not being readable.
+                var ratio = (overlay.Width * overlay.Height) / (image.Width * image.Height * 1.0);
+                /*7% (L), 15 % (M), 25% (Q), 30% (H) of error correction where a error correction of level H should result in a QRCode that is still valid even when it's 30% obscured */
                 if (ecl == "H" && ratio > 0.3)
                     throw new Exception("With ErrorCorrectionLevel.H the maximum overlap of the QR code is 30%. Choose a smaller overlay image.");
                 if (ecl == "Q" && ratio > 0.25)
@@ -115,9 +115,8 @@ namespace AGV.ZXing {
                 if (ecl == "L" && ratio > 0.07)
                     throw new Exception("With ErrorCorrectionLevel.L the maximum overlap of the QR code is 7%. Choose a smaller overlay image or a higher error correction level.");
                 
-                var deltaWidth = width - overlay.Width;
-                var deltaHeight = height - overlay.Height;                
-                image.Mutate(x => x.DrawImage(overlay, new Point(deltaWidth/2,deltaHeight/2), 0.8f));
+                var center = new Point((image.Width - overlay.Width)/2,(image.Height - overlay.Height)/2);
+                image.Mutate(x => x.DrawImage(overlay, center, 0.8f));
             }
 
             var stream = new MemoryStream();
@@ -137,22 +136,22 @@ namespace AGV.ZXing {
 
         public byte[] EncodeEmail(string email,int size,byte[]? overlayImage = null)
         {
-            return Encode(string.Format("mailto:{0}",email), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"mailto:{email}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null)
         {
-            return Encode(string.Format("geo:{0},{1}", latitude, longitude), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null)
         {
-            return Encode(string.Format("{0}{1}", isFacetime?"facetime:":"tel:", phoneNumber), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null)
         {
-            return Encode(string.Format("smsto:{0}:{1}", phoneNumber, message), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null)

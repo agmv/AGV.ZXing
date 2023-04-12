@@ -15,6 +15,7 @@ public class Tests
     [SetUp]
     public void Setup() {
         overlay = loadResource("ZXingLibTest.resources.osring.png");
+        Directory.CreateDirectory("generated");
     }
 
     [TearDown]
@@ -186,7 +187,11 @@ public class Tests
     [Category("Encode")]
     public void TestEncode_1D(string contents, string format, bool gS1Format = false)
     {
-        var bytes = z.Encode(contents, format, 200, 200, 10, false, false, gS1Format, "UTF-8", null, null, null);
+        var bytes = z.Encode(contents, format, 300, 100, 10, false, false, gS1Format, "UTF-8", null, null, null);
+        var img = SixLabors.ImageSharp.Image.Load(new MemoryStream(bytes));
+#if DEBUG
+        File.WriteAllBytes($"generated/{format}.png", bytes);
+#endif
         var barcodes = z.Decode(bytes, format);
         var b = barcodes;
         Assert.That(contents, Is.EqualTo(b.value));
@@ -204,6 +209,9 @@ public class Tests
     public void TestEncode_2D(string contents, string format, string? ecl = null)
     {
         var bytes = z.Encode(contents, format, 200, 200, 10, false, false, false, "UTF-8", ecl, null, null);
+#if DEBUG
+        File.WriteAllBytes($"generated/{format}.png", bytes);
+#endif
         var barcodes = z.Decode(bytes, format);
         var b = barcodes;
         Assert.That(b.value, Is.EqualTo(contents));
@@ -216,10 +224,10 @@ public class Tests
     [Category("Encode")]
     public void TestEncode_Overlay(string ecl) {
         var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, false, false, true, "UTF-8", ecl, null, this.overlay);
-        var b = z.Decode(bytes, "QR_CODE");
 #if DEBUG
-        File.WriteAllBytes($"overlay_{ ecl }.png", bytes);
+        File.WriteAllBytes($"generated/overlay_{ ecl }.png", bytes);
 #endif
+        var b = z.Decode(bytes, "QR_CODE");
         Assert.That(b.value, Is.EqualTo("https://www.outsystems.com"));
     }
 
@@ -234,20 +242,24 @@ public class Tests
         var bytes = z.EncodeCalendarEvent(c, 330, this.overlay);
 #if DEBUG
         Console.Write(c.ToString());
-        File.WriteAllBytes($"{ title.Replace(" ","") }.png", bytes);
+        File.WriteAllBytes($"generated/{ title.Replace(" ","") }.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo(c.ToString()));
     }
 
     [Test]
+    [TestCase(false)]
+    [TestCase(true)]
     [Category("Extensions")]
-    public void TestEncodeExt_Contact() {
+    public void TestEncodeExt_Contact(bool isMeCard) {
         var c = new ZXing.Structures.Contact("Jane Doe", new Structures.ComposedName("Jane", "Doe"),"ACME","Designer","555 321212", "555 321313", "", "jane.doe@acme.com", "Rua Central Park, 2 2A, 2795-242, Linda-a-Velha, Portugal", "www.ac.me", "Some notes");
-        var bytes = z.EncodeContact(c, false, 200, null);
+        var bytes = z.EncodeContact(c, isMeCard, 200, null);
 #if DEBUG
-        File.WriteAllBytes("contact.png", bytes);
+        File.WriteAllBytes($"generated/contact_{(isMeCard?"mecard":"vcard")}.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo(isMeCard?c.ToMeCardString():c.ToVCardString()));
     }
 
     [Test]
@@ -255,9 +267,10 @@ public class Tests
     public void TestEncodeExt_Email() {
         var bytes = z.EncodeEmail(@"andre.vieira@outsystems.com", 200, null);
 #if DEBUG
-        File.WriteAllBytes("email.png", bytes);
+        File.WriteAllBytes("generated/email.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo("mailto:andre.vieira@outsystems.com"));
     }
 
     [Test]
@@ -265,21 +278,23 @@ public class Tests
     public void TestEncodeExt_Location() {
         var bytes = z.EncodeLocation("38.7210876","-9.2390245", 200, null);
 #if DEBUG
-        File.WriteAllBytes("location.png", bytes);
+        File.WriteAllBytes("generated/location.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo("geo:38.7210876,-9.2390245"));
     }
 
     [Test]
-    [TestCase("5553344222", false, "call.png")]
-    [TestCase("5553344222", true, "facetime.png")]
+    [TestCase("5553344222", false, "generated/call.png")]
+    [TestCase("5553344222", true, "generated/facetime.png")]
     [Category("Extensions")]
     public void TestEncodeExt_PhoneNumber(string phoneNumber, bool isFacetime, string path) {
         var bytes = z.EncodePhoneNumber(phoneNumber, isFacetime, 200, null);
 #if DEBUG
         File.WriteAllBytes(path, bytes);
 #endif        
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo(isFacetime ? "facetime:5553344222" : "tel:5553344222"));
     }
 
     [Test]
@@ -287,9 +302,10 @@ public class Tests
     public void TestEncodeExt_SMS() {
         var bytes = z.EncodeSMS("5553322444","This is a message", 200, null);
 #if DEBUG
-        File.WriteAllBytes("sms.png", bytes);
+        File.WriteAllBytes("generated/sms.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo("smsto:5553322444:This is a message"));
     }
 
     [Test]
@@ -298,8 +314,9 @@ public class Tests
         var w = new Structures.Wifi("SUPERFAST-123","StrongerThanYouThink","WEP",false,"","","","");
         var bytes = z.EncodeWifi(w, 200, null);
 #if DEBUG
-        File.WriteAllBytes("wifi.png", bytes);
+        File.WriteAllBytes("generated/wifi.png", bytes);
 #endif
-        Assert.That(true);
+        var b = z.Decode(bytes, "QR_CODE");
+        Assert.That(b.value, Is.EqualTo(w.ToString()));
     }
 }

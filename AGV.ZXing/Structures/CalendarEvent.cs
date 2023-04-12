@@ -80,7 +80,8 @@ namespace AGV.ZXing.Structures {
                 Class = this.eventClass,
                 Organizer = organizer,
                 Priority = this.priority ?? 5,
-                Transparency = this.showAsBusy == true ? "OPAQUE" : "TRANSPARENT"
+                Transparency = this.showAsBusy == true ? "OPAQUE" : "TRANSPARENT",
+                Uid = null
             };
             var c = new Calendar();
             c.Events.Add(e);
