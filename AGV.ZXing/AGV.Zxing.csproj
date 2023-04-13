@@ -8,12 +8,12 @@
   <ItemGroup>
     <PackageReference Include="Ical.Net" Version="4.2.0" />
     <PackageReference Include="MixERP.Net.VCards" Version="1.0.7" />
+    <PackageReference Include="OutSystems.ExternalLibraries.SDK" Version="1.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.IO" Version="4.3.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.ImageSharp.V3" Version="0.16.15" />
-    <PackageReference Include="OutSystems.Model.ExternalLibraries.SDK" Version="1.0.2"/>
-    <!-- <PackageReference Include="OutSystems.ExternalLibraries.SDK" Version="1.1.0"/> -->
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +27,7 @@
     <EmbeddedResource Include="resources/phone.png" />
     <EmbeddedResource Include="resources/sms.png" />
     <EmbeddedResource Include="resources/wifi.png" />
+    <EmbeddedResource Include="resources/OCRB Regular.ttf" />
   </ItemGroup>
 
 </Project>

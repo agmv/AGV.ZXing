@@ -1,21 +1,22 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using ZXing;
-using ZXing.Rendering;
 using ZXing.Common;
 using ZXing.ImageSharp.Rendering;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using OutSystems.Model.ExternalLibraries.SDK;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp.Drawing.Processing;
 using AGV.ZXing.Structures;
 
 namespace AGV.ZXing {
 
     public class ZXingLib : IZXingLib
     {
-        public Structures.Barcode Decode(byte[] image, string? formatHint) {
+        public Structures.Barcode? Decode(byte[] image, string? formatHint) {
             
             var reader = new BarcodeReaderGeneric();            
             reader.AutoRotate = true;            
@@ -31,37 +32,34 @@ namespace AGV.ZXing {
             }  
             
             var result = reader.Decode(Image.Load<Rgba32>(new MemoryStream(image)));
-
-            if (result == null)
-                throw new Exception("No barcode decoded.");
-
-            return new Structures.Barcode(result.Text, result.RawBytes, result.BarcodeFormat.ToString(), convertMetadata(result.ResultMetadata));
+            
+            return result != null ? new Structures.Barcode(result.Text, result.RawBytes, result.BarcodeFormat.ToString(), convertMetadata(result.ResultMetadata)) : null;
         }
 
 
-        IEnumerable<Structures.Barcode> DecodeMulti(byte[] image, string? formatHint) {
+        // public IEnumerable<Structures.Barcode> DecodeMulti(byte[] image, string? formatHint) {
             
-            var reader = new BarcodeReaderGeneric();            
-            reader.AutoRotate = true;            
-            reader.Options.CharacterSet = "UTF-8";            
-            reader.Options.AssumeMSICheckDigit = true;
-            reader.Options.ReturnCodabarStartEnd = true;
-            reader.Options.TryHarder = true;
-            reader.Options.TryInverted = true;
-            if (formatHint != null && formatHint != "")
-            {    
-                reader.Options.PossibleFormats = new List<BarcodeFormat>();
-                reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
-            }  
+        //     var reader = new BarcodeReaderGeneric();            
+        //     reader.AutoRotate = true;            
+        //     reader.Options.CharacterSet = "UTF-8";            
+        //     reader.Options.AssumeMSICheckDigit = true;
+        //     reader.Options.ReturnCodabarStartEnd = true;
+        //     reader.Options.TryHarder = true;
+        //     reader.Options.TryInverted = true;
+        //     if (formatHint != null && formatHint != "")
+        //     {    
+        //         reader.Options.PossibleFormats = new List<BarcodeFormat>();
+        //         reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
+        //     }  
             
-            var result = reader.DecodeMultiple(Image.Load<Rgba32>(new MemoryStream(image)));
-            if (result == null)
-            {
-                throw new Exception("No barcode decoded.");
-            }                        
+        //     var result = reader.DecodeMultiple(Image.Load<Rgba32>(new MemoryStream(image)));
+        //     if (result == null)
+        //     {
+        //         throw new Exception("No barcode decoded.");
+        //     }                        
 
-            return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, r.RawBytes, r.BarcodeFormat.ToString(), convertMetadata(r.ResultMetadata)));
-        }
+        //     return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, r.RawBytes, r.BarcodeFormat.ToString(), convertMetadata(r.ResultMetadata)));
+        // }
 
         public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage) {
             var f = Enum.Parse<BarcodeFormat>(format);
@@ -119,6 +117,28 @@ namespace AGV.ZXing {
                 image.Mutate(x => x.DrawImage(overlay, center, 0.8f));
             }
 
+            var l = new List<BarcodeFormat> { BarcodeFormat.CODABAR, BarcodeFormat.CODE_128, BarcodeFormat.CODE_39, BarcodeFormat.CODE_93, BarcodeFormat.CODE_128,
+            BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.ITF, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED, BarcodeFormat.UPC_A, BarcodeFormat.UPC_E };
+                
+            if (!pureBarcode && l.Contains(f)) {
+                Stream? s = Assembly.GetExecutingAssembly().GetManifestResourceStream("AGV.ZXing.resources.OCRB Regular.ttf");
+
+                if (s != null) {
+                    var collection = new FontCollection();
+                    var family = collection.Add(s);
+                    var font = family.CreateFont(12, FontStyle.Regular);                    
+                    var o = new ResizeOptions {
+                        Mode = ResizeMode.BoxPad,
+                        PadColor = Color.White,
+                        Position = AnchorPositionMode.Top,
+                        Size = new Size(image.Width, (int)(image.Height + font.Size + 2))
+                    };
+                    var h = image.Height+1;
+                    var w = image.Width;
+                    image.Mutate(x => x.Resize(o).DrawText(contents,font,Color.Black,new PointF(w/2 - TextMeasurer.Measure(contents, new(font){}).Width/2,h)));
+                }
+            }
+
             var stream = new MemoryStream();
             image.SaveAsPng(stream);
             return stream.ToArray();
@@ -126,37 +146,37 @@ namespace AGV.ZXing {
 
         public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null)
         {
-            return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null)
         {
-            return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeEmail(string email,int size,byte[]? overlayImage = null)
         {
-            return Encode($"mailto:{email}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"mailto:{email}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null)
         {
-            return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null)
         {
-            return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null)
         {
-            return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null)
         {
-            return Encode(wifi.ToString(), "QR_CODE", size, size, 0, false, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(wifi.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
         protected Structures.Metadata[] convertMetadata(System.Collections.Generic.IDictionary<ResultMetadataType, object> metadata) {

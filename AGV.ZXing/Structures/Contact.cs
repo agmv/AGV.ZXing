@@ -1,4 +1,4 @@
-using OutSystems.Model.ExternalLibraries.SDK;
+using OutSystems.ExternalLibraries.SDK;
 using System.Collections.Generic;
 using MixERP.Net.VCards;
 using MixERP.Net.VCards.Types;
@@ -9,39 +9,39 @@ using System;
 
 namespace AGV.ZXing.Structures {
 
-    [OSStructure(Description = "Defines a this to be shared as a QR code", OriginalName = "Contact")]
+    [OSStructure(Description = "Defines a this to be shared as a QR code")]
     public struct Contact {
-        [OSStructureField(IsMandatory = true, Description = "Formated name", OriginalName = "FormatedName")]
+        [OSStructureField(IsMandatory = true, Description = "Formated name", Length = 100)]
         public string formatedName;
 
-        [OSStructureField(Description = "Composed name", OriginalName = "ComposedName")]
+        [OSStructureField(Description = "Composed name")]
         public Structures.ComposedName composedName;
 
-        [OSStructureField(Description = "Organization", OriginalName = "Organization")]
+        [OSStructureField(Description = "Organization", Length = 50)]
         public string organization;
 
-        [OSStructureField(Description = "Title", OriginalName = "Title")]
+        [OSStructureField(Description = "Title", Length = 50)]
         public string title;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Home phone number", OriginalName = "HomePhoneNumber")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Home phone number")]
         public string homePhone;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Work phone number", OriginalName = "WorkPhoneNumber")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Work phone number")]
         public string workPhone;
 
-        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Mobile phone number", OriginalName = "MobilePhoneNumber")]
+        [OSStructureField(DataType = OSDataType.PhoneNumber, Description = "Mobile phone number")]
         public string mobilePhone;
 
-        [OSStructureField(DataType = OSDataType.Email, Description = "Email", OriginalName = "Email")]
+        [OSStructureField(DataType = OSDataType.Email, Description = "Email")]
         public string email;
 
-        [OSStructureField(Description = "Address", OriginalName = "Address")]
+        [OSStructureField(Description = "Address", Length = 100)]
         public string address;
 
-        [OSStructureField(Description = "Website", OriginalName = "Website")]
+        [OSStructureField(Description = "Website", Length = 100)]
         public string website;
 
-        [OSStructureField(Description = "Notes", OriginalName = "Notes")]
+        [OSStructureField(Description = "Notes", Length = 2000)]
         public string notes;
 
         public Contact(string formatedName, ComposedName composedName, string organization, string title, 

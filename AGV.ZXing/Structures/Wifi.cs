@@ -1,33 +1,33 @@
-using OutSystems.Model.ExternalLibraries.SDK;
+using OutSystems.ExternalLibraries.SDK;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AGV.ZXing.Structures {
 
-    [OSStructure(Description = "Defines a Wifi connection", OriginalName = "Wifi")]
+    [OSStructure(Description = "Defines a Wifi connection")]
     public struct Wifi {
-        [OSStructureField(IsMandatory = true, Description = "SSID", OriginalName = "SSID")]
+        [OSStructureField(IsMandatory = true, Description = "SSID", Length = 50)]
         public string SSID;
 
-        [OSStructureField(Description = "Password", OriginalName = "Password")]
+        [OSStructureField(Description = "Password", Length = 50)]
         public string password;
 
-        [OSStructureField(IsMandatory = true, Description = "Type of authentication. Possible values: WEP, WPA, WPA2-EAP, nopass.", OriginalName = "AuthenticationType")]
+        [OSStructureField(IsMandatory = true, Description = "Type of authentication. Possible values: WEP, WPA, WPA2-EAP, nopass.", Length = 10)]
         public string authentication;
 
-        [OSStructureField(Description = "Is hidden", OriginalName = "IsHidden")]
+        [OSStructureField(Description = "Is hidden")]
         public bool isHidden;
 
-        [OSStructureField(Description = "EAP method, like TTLS or PWD (WPA2-EAP only)", OriginalName = "EAPMethod")]
+        [OSStructureField(Description = "EAP method, like TTLS or PWD (WPA2-EAP only)", Length = 10)]
         public string eapMethod;
         
-        [OSStructureField(Description = "Anonymous identity (WPA2-EAP only)", OriginalName = "AnonymousIdentity")]
+        [OSStructureField(Description = "Anonymous identity (WPA2-EAP only)", Length = 50)]
         public string anonymousIdentity;
         
-        [OSStructureField(Description = "Identity (WPA2-EAP only)", OriginalName = "Identity")]
+        [OSStructureField(Description = "Identity (WPA2-EAP only)", Length = 50)]
         public string identity;
         
-        [OSStructureField(Description = "Phase 2 method like MSCHAPV2 (WPA2-EAP only)", OriginalName = "Phase2Method")]
+        [OSStructureField(Description = "Phase 2 method like MSCHAPV2 (WPA2-EAP only)", Length = 10)]
         public string phase2Method;
 
         public Wifi(string ssid, string password, string authentication, bool isHidden, string eapMethod, string anonymousIdentity, string identity, string phase2Method):this() {

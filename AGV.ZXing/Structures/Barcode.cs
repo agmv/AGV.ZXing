@@ -1,4 +1,4 @@
-using OutSystems.Model.ExternalLibraries.SDK;
+using OutSystems.ExternalLibraries.SDK;
 using System.Collections.Generic;
 
 namespace AGV.ZXing.Structures {
@@ -17,18 +17,18 @@ namespace AGV.ZXing.Structures {
         //[OSStructureField(Description = "Metadata associated with the decoded barcode")]
         //public IEnumerable<Metadata> metadata;
 
-       public Barcode(Structures.Barcode b):this() {
+        public Barcode(Structures.Barcode b):this() {
         value = b.value;
         rawBytes = b.rawBytes;
         format = b.format;
         // metadata = b.metadata;
-       } 
+        } 
 
-       public Barcode(string v, byte[] b, string f, Metadata[] m):this() {
+        public Barcode(string v, byte[] b, string f, Metadata[] m):this() {
         value = v;
         rawBytes = b;
         format = f;
         // metadata = m;
-       }
+        }
     }    
 }
