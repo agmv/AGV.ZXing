@@ -98,7 +98,7 @@ namespace AGV.ZXing {
         [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodePhoneNumber(
-            [OSParameter(DataType = OSDataType.Text, Description = "Phone number to encode")]
+            [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number to encode")]
             string phoneNumber,
             [OSParameter(DataType = OSDataType.Boolean, Description = "Indicates if it generates a facetime call")]
             bool isFacetime,
@@ -110,7 +110,7 @@ namespace AGV.ZXing {
         [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
         public byte[] EncodeSMS(
-            [OSParameter(DataType = OSDataType.Text, Description = "Phone number")]
+            [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number")]
             string phoneNumber,
             [OSParameter(DataType = OSDataType.Text, Description = "Message")]
             string message,
