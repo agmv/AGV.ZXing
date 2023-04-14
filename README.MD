@@ -20,7 +20,7 @@ Structures.Barcode? Decode(byte[] image, string? formatHint)
 | image | Image containing the barcode. |
 | formatHint | Optional parameter to indicate what type of barcode to scan the image for, e.g. `QR_CODE`. |
 
-Return type [`Barcode`](#structuresbarcode).
+Return type [`Barcode`](#barcode).
 
 <!--
 ### DecodeMulti
@@ -34,7 +34,7 @@ IEnumerable<Structures.Barcode>? DecodeMulti(byte[] image, string? formatHint)
 | image | Image containing the barcode. |
 | formatHint | Optional parameter to indicate what type of barcode to scan the image for. E.g. `QR_CODE`. |
 
-Return type [`IEnumerable<Barcode>`](#structuresbarcode).
+Return type [`IEnumerable<Barcode>`](#barcode).
 -->
 
 ### Encode
@@ -197,7 +197,7 @@ Structure that holds decoded barcodes
 | value | `string` | Barcode decoded value |
 | rawBytes | `byte[]` | Barcode raw bytes |
 | format | `string` | Barcode format |
-<!--| metadata | [`IEnumerable<Metadata>`](#structuresmetada)| Barcode metada |
+<!--| metadata | [`IEnumerable<Metadata>`](#metada)| Barcode metada |
 
 ### Metadata `AGV.ZXing.Structures.Metada`
 | Attribute | Type | Description |
