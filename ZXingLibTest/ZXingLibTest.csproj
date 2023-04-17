@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AGV.ZXing\AGV.Zxing.csproj" />
+    <ProjectReference Include="..\AGV.ZXing\AGV.ZXing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
 using OutSystems.ExternalLibraries.SDK;
-using System.Collections.Generic;
 using MixERP.Net.VCards;
 using MixERP.Net.VCards.Types;
 using MixERP.Net.VCards.Models;

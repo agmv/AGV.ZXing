@@ -3,7 +3,9 @@ using OutSystems.ExternalLibraries.SDK;
 
 namespace AGV.ZXing {
 
-    [OSInterface(Description = "Provides actions to encode and decode barcodes. The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13, Code 39, Code 93, Code 128, ITF, Codabar, MSI, RSS-14 (all variants), QR Code, Data Matrix, Aztec, and PDF-417. The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix", IconResourceName = "AGV.ZXing.resources.zxing.png", Name = "ZXingLib")]
+    [OSInterface(Description = @"Provides actions to encode and decode barcodes. 
+The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13, Code 39, Code 93, Code 128, ITF, Codabar, MSI, RSS-14 (all variants), QR Code, Data Matrix, Aztec, and PDF-417. The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix", 
+    IconResourceName = "AGV.ZXing.resources.zxing.png", Name = "ZXingLib")]
     public interface IZXingLib {
         [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcode")]
         public Structures.Barcode? Decode(

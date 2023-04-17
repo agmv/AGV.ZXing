@@ -1,5 +1,4 @@
 using OutSystems.ExternalLibraries.SDK;
-using System.Collections.Generic;
 
 namespace AGV.ZXing.Structures {
 
