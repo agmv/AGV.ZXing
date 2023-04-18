@@ -61,7 +61,8 @@ namespace AGV.ZXing {
         //     return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, r.RawBytes, r.BarcodeFormat.ToString(), convertMetadata(r.ResultMetadata)));
         // }
 
-        public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage) {
+        public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, 
+        bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string outputFormat = "PNG") {
             var f = Enum.Parse<BarcodeFormat>(format);
             if ((f == BarcodeFormat.EAN_13 || f == BarcodeFormat.UPC_A) && (margin < 6)) {
                 throw new Exception("EAN-13 and UPC-A codes should have a margin greater than 6 to ensure barcode can be scanned properly.");
@@ -139,44 +140,63 @@ namespace AGV.ZXing {
                 }
             }
 
-            var stream = new MemoryStream();
-            image.SaveAsPng(stream);
+            var stream = new MemoryStream();            
+            switch (outputFormat.ToLower())
+            {
+                case "gif":
+                    image.SaveAsGif(stream);
+                    break;
+                case "jpg":
+                    image.SaveAsJpeg(stream);
+                    break;
+                case "webp":
+                    image.SaveAsWebp(stream);
+                    break;
+                case "bmp":
+                    image.SaveAsBmp(stream);
+                    break;
+                case "png":
+                    image.SaveAsPng(stream);
+                    break;
+                default:
+                    throw new Exception("Unsupported format");
+            }
             return stream.ToArray();
         }
 
-        public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null)
+        public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
-        public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null)
+        public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
-        public byte[] EncodeEmail(string email,int size,byte[]? overlayImage = null)
+        public byte[] EncodeEmail(string email,int size,byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode($"mailto:{email}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"mailto:{email}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
-        public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null)
+        public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
-        public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null)
+        public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
         }
 
-        public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null)
+        public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
-        public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null)
+        public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode(wifi.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(wifi.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         protected Structures.Metadata[] convertMetadata(System.Collections.Generic.IDictionary<ResultMetadataType, object> metadata) {

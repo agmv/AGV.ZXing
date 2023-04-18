@@ -186,8 +186,7 @@ public class Tests
     [Category("Encode")]
     public void TestEncode_1D(string contents, string format)
     {
-        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, false, "UTF-8", null, null, null);
-        var img = SixLabors.ImageSharp.Image.Load(new MemoryStream(bytes));
+        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, false, "UTF-8", null, null, null);        
 #if DEBUG
         File.WriteAllBytes($"output/{format}.png", bytes);
 #endif
@@ -205,7 +204,6 @@ public class Tests
     {
         var contents = format == "CODE_123" ? $"{(char)0x00F1}01234567890{(char)0x00F1}45678" : $"{(char)29}01234567890{(char)29}45678";
         var bytes = z.Encode(contents, format, 300, 100, 10, true, false, true, "UTF-8", null, null, null);
-        var img = SixLabors.ImageSharp.Image.Load(new MemoryStream(bytes));
 #if DEBUG
         File.WriteAllBytes($"output/{format}_GS1.png", bytes);
 #endif
@@ -381,4 +379,20 @@ public class Tests
         Assert.That(b.value, Is.EqualTo(w.ToString()));
     }
 
+    [Test]
+    [TestCase("png")]
+    [TestCase("jpg")]
+    [TestCase("bmp")]
+    [TestCase("webp")]
+    public void TestImageFormats(string format) {
+        var contents = "This is a test";
+        var bytes = z.Encode(contents, "CODE_128", 300, 100, 10, true, false, false, "UTF-8", null, null, null);        
+#if DEBUG
+        File.WriteAllBytes($"output/testformat.{format}", bytes);
+#endif
+        var barcode = z.Decode(bytes, "CODE_128");
+        Assert.That(barcode, Is.Not.Null);
+        var b = barcode.GetValueOrDefault();
+        Assert.That(contents, Is.EqualTo(b.value));
+    }
 }

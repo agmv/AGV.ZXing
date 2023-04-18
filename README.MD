@@ -46,7 +46,8 @@ public byte[] Encode(string contents, string format,
     int width, int height, int margin,
     bool pureBarcode, bool gS1Format, bool noPadding,
     string? encoding = null, string? ecl = null, int? qRCodeVersion = null,
-    byte[]? overlayImage = null);
+    byte[]? overlayImage = null,
+    string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -63,6 +64,7 @@ public byte[] Encode(string contents, string format,
 | ecl | Specifies what degree of error correction to use, for example in QR Codes. Type depends on the encoder.<br/>For example for QR codes it can be L (~7% correction), M (~15% correction), Q (~20% correction), and H (~30% correction).<br/>For Aztec it is integer representing the minimal percentage of error correction words. Note: an Aztec symbol should have a minimum of 25% EC words.<br/>For PDF417 it is integer between 0 and 8. |
 | qRCodeVersion | Specifies the exact version of QR code to be encoded. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -71,7 +73,8 @@ Return type `byte[]`.
 Generates a barcode with the received calendar event data.
 
 ```csharp
-public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null);
+public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, 
+                                byte[]? overlayImage = null, string outputFormat = "PNG"));
 ```
 
 | Parameter | Description |
@@ -79,6 +82,8 @@ public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]?
 | calendarEvent | Calendar event to encode as a barcode of type [`CalendarEvent`](#calendarevent). |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
+
 
 Return type `byte[]`.
 
@@ -87,7 +92,8 @@ Return type `byte[]`.
 Generates a barcode with the received contact data.
 
 ```csharp
-public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null);
+public byte[] EncodeContact(Contact contact, bool isMeCard, int size, 
+                            byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -96,6 +102,7 @@ public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? ov
 | isMeCard | Indicates if it uses MECARD format instead of VCARD format. |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -104,7 +111,8 @@ Return type `byte[]`.
 Generates a barcode with the received email address.
 
 ```csharp
-public byte[] EncodeEmail(string email, int size, byte[]? overlayImage = null);
+public byte[] EncodeEmail(string email, int size, 
+                        byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -112,6 +120,7 @@ public byte[] EncodeEmail(string email, int size, byte[]? overlayImage = null);
 | email | Email to encode. |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -120,7 +129,8 @@ Return type `byte[]`.
 Generates a barcode with the received geo location.
 
 ```csharp
-public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null);
+public byte[] EncodeLocation(string latitude, string longitude, int size, 
+                            byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -129,6 +139,7 @@ public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]
 | longitude | Longitude. |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -137,7 +148,8 @@ Return type `byte[]`.
 Generates a barcode with the received phone number.
 
 ```csharp
-public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null);
+public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, 
+                                byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -146,6 +158,7 @@ public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, b
 | isFacetime | Indicates if it generates a facetime call. |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -154,7 +167,8 @@ Return type `byte[]`.
 Generates a barcode with the received SMS content.
 
 ```csharp
-public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null);
+public byte[] EncodeSMS(string phoneNumber, string message, int size, 
+                        byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -163,6 +177,7 @@ public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? ov
 | message | Message. |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 
@@ -172,7 +187,8 @@ Return type `byte[]`.
 Generates a barcode with the Wifi connection information.
 
 ```csharp
-public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null);
+public byte[] EncodeWifi(Wifi wifi, int size, 
+                        byte[]? overlayImage = null, string outputFormat = "PNG");
 ```
 
 | Parameter | Description |
@@ -180,6 +196,7 @@ public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null);
 | wifi | Wifi data of type [`Wifi`](#wifi). |
 | size | Width of the barcode image. |
 | overlayImage | Overlay image for QR Code. |
+| outputFormat | Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP. |
 
 Return type `byte[]`.
 

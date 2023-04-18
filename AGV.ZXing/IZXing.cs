@@ -51,7 +51,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Specifies the exact version of QR code to be encoded.")]
             int? qRCodeVersion = null,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
 
         [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.event.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -61,7 +63,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
 
         [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.contact.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -73,7 +77,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
         
         [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.email.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -83,7 +89,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.gps.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -95,7 +103,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -107,7 +117,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -119,7 +131,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.wifi.png", 
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
@@ -129,7 +143,9 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
             int size,            
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
-            byte[]? overlayImage = null);
+            byte[]? overlayImage = null,
+            [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
+            string outputFormat = "PNG");
             
     }
 }
