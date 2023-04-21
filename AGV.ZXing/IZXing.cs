@@ -12,15 +12,18 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]            
             byte[] image,
             [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
-            string? formatHint = null);
+            string? formatHint = null,
+            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
+            bool detectionImage = false);
 
-        //TODO: return a list of barcodes (IEnumerable<Structures.Barcode>) instead of just one.
-        // [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes")]
-        // public IEnumerable<Structures.Barcode> DecodeMulti(
-        //     // [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]
-        //     byte[] image,
-        //     // [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
-        //     string? formatHint = null);
+        [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes")]
+        public IEnumerable<Structures.Barcode>? DecodeMulti(
+            // [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]
+            byte[] image,
+            // [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
+            string? formatHint = null,
+            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
+            bool detectionImage = false);
 
         [OSAction(Description = "Generates a barcode with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png", 
                     ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]

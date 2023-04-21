@@ -30,6 +30,8 @@
     <EmbeddedResource Include="resources/rss_14.png" />
     <EmbeddedResource Include="resources/rss_expanded.png" />
     <EmbeddedResource Include="resources/osring.png" />
+    <EmbeddedResource Include="resources/datamatrix.png" />
+    <EmbeddedResource Include="resources/qrcode.png" />
   </ItemGroup>
 
 </Project>

@@ -18,6 +18,6 @@ namespace AGV.ZXing.Structures {
        public Metadata (string k, string v):this() {
         key = k;
         value = v;
-       } 
+       }
     }    
 }

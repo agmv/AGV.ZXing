@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 using System.Collections.Generic;
 using ZXing;
 using ZXing.Common;
@@ -16,7 +17,37 @@ namespace AGV.ZXing {
 
     public class ZXingLib : IZXingLib
     {
-        public Structures.Barcode? Decode(byte[] image, string? formatHint) {
+        public Structures.Barcode? Decode(byte[] image, string? formatHint, bool detectionImage = false) {
+            
+            var reader = new BarcodeReaderGeneric();
+            reader.AutoRotate = true;            
+            reader.Options.CharacterSet = "UTF-8";            
+            reader.Options.AssumeMSICheckDigit = true;
+            reader.Options.ReturnCodabarStartEnd = true;
+            reader.Options.TryHarder = true;
+            reader.Options.TryInverted = true;
+            if (formatHint != null && formatHint != "")
+            {    
+                reader.Options.PossibleFormats = new List<BarcodeFormat>();
+                reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
+            } else {
+                reader.Options.PossibleFormats = new BarcodeFormat[] { BarcodeFormat.All_1D, BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417, BarcodeFormat.MAXICODE, BarcodeFormat.IMB };
+            }
+            var img = Image.Load<Rgba32>(new MemoryStream(image));            
+            var result = reader.Decode(img);
+
+            if (result == null)
+                return null;
+
+            return new Structures.Barcode(result.Text, 
+                                    result.RawBytes, 
+                                    result.BarcodeFormat.ToString(), 
+                                    convertMetadata(result.ResultMetadata), 
+                                    detectionImage ? generateMarksImage(result, img.Clone()) : null);
+        }
+
+
+        public IEnumerable<Structures.Barcode>? DecodeMulti(byte[] image, string? formatHint, bool detectionImage = false) {
             
             var reader = new BarcodeReaderGeneric();            
             reader.AutoRotate = true;            
@@ -29,37 +60,22 @@ namespace AGV.ZXing {
             {    
                 reader.Options.PossibleFormats = new List<BarcodeFormat>();
                 reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
-            }  
+            }
+            else {
+                reader.Options.PossibleFormats = new BarcodeFormat[] { BarcodeFormat.All_1D, BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417, BarcodeFormat.MAXICODE, BarcodeFormat.IMB };
+            }
+            var img = Image.Load<Rgba32>(new MemoryStream(image));
+            var result = reader.DecodeMultiple(img);
             
-            var result = reader.Decode(Image.Load<Rgba32>(new MemoryStream(image)));
-            
-            return result != null ? new Structures.Barcode(result.Text, result.RawBytes, result.BarcodeFormat.ToString(), convertMetadata(result.ResultMetadata)) : null;
+            if (result == null)
+                return null;
+
+            return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, 
+                                                                        r.RawBytes, 
+                                                                        r.BarcodeFormat.ToString(), 
+                                                                        convertMetadata(r.ResultMetadata),
+                                                                        detectionImage?generateMarksImage(r,img.Clone()):null));
         }
-
-
-        // public IEnumerable<Structures.Barcode> DecodeMulti(byte[] image, string? formatHint) {
-            
-        //     var reader = new BarcodeReaderGeneric();            
-        //     reader.AutoRotate = true;            
-        //     reader.Options.CharacterSet = "UTF-8";            
-        //     reader.Options.AssumeMSICheckDigit = true;
-        //     reader.Options.ReturnCodabarStartEnd = true;
-        //     reader.Options.TryHarder = true;
-        //     reader.Options.TryInverted = true;
-        //     if (formatHint != null && formatHint != "")
-        //     {    
-        //         reader.Options.PossibleFormats = new List<BarcodeFormat>();
-        //         reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
-        //     }  
-            
-        //     var result = reader.DecodeMultiple(Image.Load<Rgba32>(new MemoryStream(image)));
-        //     if (result == null)
-        //     {
-        //         throw new Exception("No barcode decoded.");
-        //     }                        
-
-        //     return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, r.RawBytes, r.BarcodeFormat.ToString(), convertMetadata(r.ResultMetadata)));
-        // }
 
         public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, 
         bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string outputFormat = "PNG") {
@@ -208,6 +224,48 @@ namespace AGV.ZXing {
                 l.Add(r);
             }
             return l.ToArray();
+        }
+
+        protected byte[]? generateMarksImage(Result result, Image<Rgba32> img) {
+            if (result.ResultPoints.Count() > 1) {
+                var stream = new MemoryStream();
+                        
+                var rotated = false;
+                // Rotate if needed
+                if (Int32.TryParse(result.ResultMetadata[ResultMetadataType.ORIENTATION].ToString(), out int angle)) {
+                    img.Mutate(x => x.Rotate(-angle));
+                    rotated = true;
+                }
+                
+                var points = result.ResultPoints.ToList().ConvertAll(new Converter<ResultPoint, PointF>(x => new PointF(x.X, x.Y)));
+                var pen = new Pen(Color.LimeGreen, 2);
+
+                switch(points.Count) {
+                    case 2:
+                        img.Mutate(x => x.DrawLines(pen, points.ToArray()));
+                    break;
+                    case 4:
+                        img.Mutate(x => x.DrawLines(pen, points.ToArray()));
+                    break;
+                    default:
+                        if (points.Count % 2 == 0) {
+                            for (int i = 0; i < points.Count; i+=2) {
+                                var p = new PointF[] {
+                                    points[i], points[i+1]//, points[i+2], points[i+3]
+                                };
+                                img.Mutate(x => x.DrawPolygon(pen, p));
+                            }
+                        }
+                    break;
+                }
+                
+                if (rotated)
+                    img.Mutate(x => x.Rotate(angle));
+
+                img.SaveAsPng(stream);
+                return stream.ToArray();
+            }
+            return null;
         }
         
     }
