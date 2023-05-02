@@ -16,17 +16,21 @@ public class EncodeTests
     [TestCase("0123456789045678", "CODE_128")]
     [TestCase("(11)100224(17)110224(3102)000100", "CODE_128")]
     [TestCase("00012345678905", "ITF")]
+    [TestCase("1234567890ABCEDF", "PLESSEY", false)]
+    [TestCase("1234567", "MSI", false)]
     [Category("Encode")]
-    public void TestEncode_1D(string contents, string format)
+    public void TestEncode_1D(string contents, string format, bool canDecode = true)
     {
         var bytes = z.Encode(contents, format, 300, 100, 10, true, false, false, "UTF-8", null, null, null);
 #if DEBUG
         File.WriteAllBytes($"output/1d/{format}.png", bytes);
 #endif
         var barcode = z.Decode(bytes, format);
-        Assert.That(barcode, Is.Not.Null);
-        var b = barcode.GetValueOrDefault();
-        Assert.That(contents, Is.EqualTo(b.value));
+        if (canDecode) {
+                Assert.That(barcode, Is.Not.Null);
+                var b = barcode.GetValueOrDefault();
+                Assert.That(contents, Is.EqualTo(b.value));
+        }
     }
 
     [Test(Description = "Executes tests for encoding GS1 barcodes")]
@@ -78,18 +82,22 @@ public class EncodeTests
     [TestCase("0123456789045678", "CODE_128")]
     [TestCase("(11)100224(17)110224(3102)000100", "CODE_128")]
     [TestCase("00012345678905", "ITF")]
+    [TestCase("1234567890ABCEDF", "PLESSEY", false)]
+    [TestCase("1234567", "MSI", false)]
     [Category("BarcodeLabel")]
-    public void TestEncode_NotPureBarcode(string contents, string format)
+    public void TestEncode_NotPureBarcode(string contents, string format, bool canDecode = true)
     {
         var bytes = z.Encode(contents, format, 300, 100, 10, false, false, false, "UTF-8", null, null, null);
         var img = SixLabors.ImageSharp.Image.Load(new MemoryStream(bytes));
 #if DEBUG
         File.WriteAllBytes($"output/withlabel/{format}_label.png", bytes);
 #endif
-        var barcode = z.Decode(bytes, format);
-        Assert.That(barcode, Is.Not.Null);
-        var b = barcode.GetValueOrDefault();
-        Assert.That(contents, Is.EqualTo(b.value));
+        if (canDecode) {
+                var barcode = z.Decode(bytes, format);
+                Assert.That(barcode, Is.Not.Null);
+                var b = barcode.GetValueOrDefault();
+                Assert.That(contents, Is.EqualTo(b.value));
+        }
     }
 
 }
