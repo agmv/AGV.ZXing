@@ -17,64 +17,75 @@ namespace AGV.ZXing {
 
     public class ZXingLib : IZXingLib
     {
+        // The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13, Code 39, Code 93, Code 128, ITF, Codabar, MSI, RSS-14 (all variants), 
+        // QR Code, Data Matrix, Aztec and PDF-417.
+        // AGV: Maxicode, IMB, and PHARMA_CODE decoders also implemented according to Github... 
+        static BarcodeFormat[] decoders = new BarcodeFormat[] { BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
+                        BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.CODE_39, BarcodeFormat.CODE_93, BarcodeFormat.CODE_128,
+                        BarcodeFormat.ITF, BarcodeFormat.CODABAR, BarcodeFormat.MSI, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED,
+                        BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417, 
+                        BarcodeFormat.MAXICODE, BarcodeFormat.IMB };
+        
+        // The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix
+        static BarcodeFormat[] encoders = new BarcodeFormat[] { BarcodeFormat.UPC_A,
+                    BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.CODE_39, BarcodeFormat.CODE_128,
+                    BarcodeFormat.ITF, BarcodeFormat.CODABAR, BarcodeFormat.PLESSEY, BarcodeFormat.MSI,
+                    BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417 };
+                            
         public Structures.Barcode? Decode(byte[] image, string? formatHint, bool detectionImage = false) {
             
             var reader = new BarcodeReaderGeneric();
             reader.AutoRotate = true;            
             reader.Options.CharacterSet = "UTF-8";            
-            reader.Options.AssumeMSICheckDigit = true;
             reader.Options.ReturnCodabarStartEnd = true;
             reader.Options.TryHarder = true;
             reader.Options.TryInverted = true;
+            reader.Options.UseCode39ExtendedMode = true;
+            reader.Options.UseCode39RelaxedExtendedMode = true;
             if (formatHint != null && formatHint != "")
             {    
                 reader.Options.PossibleFormats = new List<BarcodeFormat>();
                 reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
             } else {
-                reader.Options.PossibleFormats = new BarcodeFormat[] { BarcodeFormat.All_1D, BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417, BarcodeFormat.MAXICODE, BarcodeFormat.IMB };
+                reader.Options.PossibleFormats = decoders;
             }
             var img = Image.Load<Rgba32>(new MemoryStream(image));            
             var result = reader.Decode(img);
 
-            if (result == null)
-                return null;
-
-            return new Structures.Barcode(result.Text, 
-                                    result.RawBytes, 
-                                    result.BarcodeFormat.ToString(), 
-                                    convertMetadata(result.ResultMetadata), 
-                                    detectionImage ? generateMarksImage(result, img.Clone()) : null);
+            return (result == null) ? null : new Structures.Barcode(result.Text, 
+                                        result.RawBytes, 
+                                        result.BarcodeFormat.ToString(), 
+                                        convertMetadata(result.ResultMetadata), 
+                                        detectionImage ? generateMarksImage(result, img.Clone()) : null);
         }
 
 
         public IEnumerable<Structures.Barcode>? DecodeMulti(byte[] image, string? formatHint, bool detectionImage = false) {
-            
+                        
             var reader = new BarcodeReaderGeneric();            
-            reader.AutoRotate = true;            
+            reader.AutoRotate = true;
             reader.Options.CharacterSet = "UTF-8";            
-            reader.Options.AssumeMSICheckDigit = true;
             reader.Options.ReturnCodabarStartEnd = true;
             reader.Options.TryHarder = true;
             reader.Options.TryInverted = true;
+            reader.Options.UseCode39ExtendedMode = true;
+            reader.Options.UseCode39RelaxedExtendedMode = true;
             if (formatHint != null && formatHint != "")
             {    
                 reader.Options.PossibleFormats = new List<BarcodeFormat>();
                 reader.Options.PossibleFormats.Add(Enum.Parse<BarcodeFormat>(formatHint));
             }
             else {
-                reader.Options.PossibleFormats = new BarcodeFormat[] { BarcodeFormat.All_1D, BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417, BarcodeFormat.MAXICODE, BarcodeFormat.IMB };
+                reader.Options.PossibleFormats = decoders;
             }
             var img = Image.Load<Rgba32>(new MemoryStream(image));
             var result = reader.DecodeMultiple(img);
             
-            if (result == null)
-                return null;
-
-            return Array.ConvertAll(result, r => new Structures.Barcode(r.Text, 
-                                                                        r.RawBytes, 
-                                                                        r.BarcodeFormat.ToString(), 
-                                                                        convertMetadata(r.ResultMetadata),
-                                                                        detectionImage?generateMarksImage(r,img.Clone()):null));
+            return (result == null) ? null : Array.ConvertAll(result, r => new Structures.Barcode(r.Text, 
+                                                                    r.RawBytes, 
+                                                                    r.BarcodeFormat.ToString(), 
+                                                                    convertMetadata(r.ResultMetadata),
+                                                                    detectionImage?generateMarksImage(r,img.Clone()):null));
         }
 
         public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, 
@@ -149,7 +160,7 @@ namespace AGV.ZXing {
                         Mode = ResizeMode.BoxPad,
                         PadColor = Color.White,
                         Position = AnchorPositionMode.Top,
-                        Size = new Size(image.Width, (int)(image.Height + font.Size + 2))
+                        Size = new Size(image.Width, (int)(image.Height + font.Size + 1))
                     };
                     var h = image.Height+1;
                     var w = image.Width;
@@ -268,7 +279,11 @@ namespace AGV.ZXing {
             }
             return null;
         }
-        
+
+        public string[] Encoders() {
+            return Array.ConvertAll(encoders, x => x.ToString());
+        }
+                
     }
 
     public static class StringExtension{
@@ -276,4 +291,5 @@ namespace AGV.ZXing {
             return s.Replace(",",@"\,").Replace(";",@"\;").ReplaceLineEndings(@"\n").Replace(@"\",@"\\").Replace(@"""",@"\""").Replace(":",@"\:");
         }
     }
+
 }

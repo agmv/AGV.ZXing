@@ -20,18 +20,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="resources/bar92.png" />
+    <EmbeddedResource Include="resources/upc-a.png" />
+    <EmbeddedResource Include="resources/upc-e.png" />
+    <EmbeddedResource Include="resources/ean-8.png" />
     <EmbeddedResource Include="resources/EAN_13.png" />
-    <EmbeddedResource Include="resources/imb.png" />
-    <EmbeddedResource Include="resources/maxicode.png" />
-    <EmbeddedResource Include="resources/multi-1d.jpg" />
-    <EmbeddedResource Include="resources/pdf417.png" />
-    <EmbeddedResource Include="resources/pharmacode.png" />
+    <EmbeddedResource Include="resources/code-39.png" />
+    <EmbeddedResource Include="resources/code-93.png" />
+    <EmbeddedResource Include="resources/code-128.png" />
+    <EmbeddedResource Include="resources/itf.png" />
+    <EmbeddedResource Include="resources/codabar.png" />
+    <EmbeddedResource Include="resources/msi.png" />
     <EmbeddedResource Include="resources/rss_14.png" />
     <EmbeddedResource Include="resources/rss_expanded.png" />
-    <EmbeddedResource Include="resources/osring.png" />
-    <EmbeddedResource Include="resources/datamatrix.png" />
     <EmbeddedResource Include="resources/qrcode.png" />
+    <EmbeddedResource Include="resources/datamatrix.png" />
+    <EmbeddedResource Include="resources/aztec.png" />
+    <EmbeddedResource Include="resources/pdf417.png" />
+    <EmbeddedResource Include="resources/maxicode.png" />
+    <EmbeddedResource Include="resources/imb.png" />
+    <EmbeddedResource Include="resources/pharmacode.png" />
+
+    <EmbeddedResource Include="resources/multi-1d.jpg" />
+    
+    <EmbeddedResource Include="resources/osring.png" />
   </ItemGroup>
 
 </Project>

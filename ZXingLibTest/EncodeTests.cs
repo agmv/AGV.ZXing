@@ -27,9 +27,9 @@ public class EncodeTests
 #endif
         var barcode = z.Decode(bytes, format);
         if (canDecode) {
-                Assert.That(barcode, Is.Not.Null);
-                var b = barcode.GetValueOrDefault();
-                Assert.That(contents, Is.EqualTo(b.value));
+            Assert.That(barcode, Is.Not.Null);
+            var b = barcode.GetValueOrDefault();
+            Assert.That(contents, Is.EqualTo(b.value));
         }
     }
 
@@ -93,10 +93,10 @@ public class EncodeTests
         File.WriteAllBytes($"output/withlabel/{format}_label.png", bytes);
 #endif
         if (canDecode) {
-                var barcode = z.Decode(bytes, format);
-                Assert.That(barcode, Is.Not.Null);
-                var b = barcode.GetValueOrDefault();
-                Assert.That(contents, Is.EqualTo(b.value));
+            var barcode = z.Decode(bytes, format);
+            Assert.That(barcode, Is.Not.Null);
+            var b = barcode.GetValueOrDefault();
+            Assert.That(contents, Is.EqualTo(b.value));
         }
     }
 
