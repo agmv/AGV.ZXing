@@ -36,6 +36,7 @@
     <EmbeddedResource Include="resources/phone.png" />
     <EmbeddedResource Include="resources/sms.png" />
     <EmbeddedResource Include="resources/wifi.png" />
+    <EmbeddedResource Include="resources/encoders.png" />
     <EmbeddedResource Include="resources/OCRB Regular.ttf" />
   </ItemGroup>
 

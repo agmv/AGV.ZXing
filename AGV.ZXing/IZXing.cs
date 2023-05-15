@@ -25,7 +25,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
             bool detectionImage = false);
 
-        [OSAction(Description = "Supported barcode encoding formats", ReturnName = "Formats")]
+        [OSAction(Description = "Supported barcode encoding formats", IconResourceName = "AGV.ZXing.resources.encoders.png", ReturnName = "Formats")]
         public string[] Encoders();
 
 
