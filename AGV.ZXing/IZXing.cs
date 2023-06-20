@@ -7,7 +7,7 @@ namespace AGV.ZXing {
 The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13, Code 39, Code 93, Code 128, ITF, Codabar, MSI, RSS-14 (all variants), QR Code, Data Matrix, Aztec, and PDF-417. The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix", 
     IconResourceName = "AGV.ZXing.resources.zxing.png", Name = "ZXingLib")]
     public interface IZXingLib {        
-        [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcode")]
+        [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcode", ReturnDescription = "The decoded barcode")]
         public Structures.Barcode? Decode(
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]            
             byte[] image,
@@ -16,7 +16,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
             bool detectionImage = false);
 
-        [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes")]
+        [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes", ReturnDescription = "A list of the decoded barcodes")]
         public IEnumerable<Structures.Barcode>? DecodeMulti(
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]
             byte[] image,
@@ -25,12 +25,12 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
             bool detectionImage = false);
 
-        [OSAction(Description = "Supported barcode encoding formats", IconResourceName = "AGV.ZXing.resources.encoders.png", ReturnName = "Formats")]
+        [OSAction(Description = "Supported barcode encoding formats", IconResourceName = "AGV.ZXing.resources.encoders.png", ReturnName = "Formats", ReturnDescription = "The list of supported barcode encoding formats")]
         public string[] Encoders();
 
 
         [OSAction(Description = "Generates a barcode with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png", 
-                    ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                    ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] Encode(
             [OSParameter(DataType = OSDataType.Text, Description = "Contents to encode as a barcode")]
             string contents,
@@ -63,7 +63,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
 
         [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.event.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeCalendarEvent(
             [OSParameter(Description = "Calendar event to encode as a barcode")]
             Structures.CalendarEvent calendarEvent,
@@ -75,7 +75,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
 
         [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.contact.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeContact(
             [OSParameter(Description = "Contact to encode as a barcode")]
             Structures.Contact contact,
@@ -89,7 +89,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
         
         [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.email.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeEmail(
             [OSParameter(DataType = OSDataType.Text, Description = "Email to encode")]
             string email,
@@ -101,7 +101,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.gps.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeLocation(
             [OSParameter(DataType = OSDataType.Text, Description = "Latitude")]
             string latitude,
@@ -115,7 +115,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodePhoneNumber(
             [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number to encode")]
             string phoneNumber,
@@ -129,7 +129,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeSMS(
             [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number")]
             string phoneNumber,
@@ -143,7 +143,7 @@ The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13
             string outputFormat = "PNG");
             
         [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.wifi.png", 
-                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData)]
+                ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeWifi(
             [OSParameter(Description = "Wifi data")]
             Structures.Wifi wifi,
