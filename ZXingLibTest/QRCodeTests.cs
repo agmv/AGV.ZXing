@@ -14,7 +14,7 @@ public class QRCodeTests
     [TestCase("H")]
     [TestCase(null)]
     [Category("QRCode")]
-    public void TestEncode_Overlay(string ecl)
+    public void TestEncode_Overlay(string? ecl)
     {
         var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, true, false, true, "UTF-8", ecl, null, this.overlay);
 #if DEBUG
@@ -38,7 +38,6 @@ public class QRCodeTests
         var c = new ZXing.Structures.CalendarEvent(title, isAllDay, s, e, location, description, eClass, organizer, priority, showAsBusy);
         var bytes = z.EncodeCalendarEvent(c, 330, this.overlay);
 #if DEBUG
-        Console.Write(c.ToString());
         File.WriteAllBytes($"output/qrcode/{title.Replace(" ", "")}.png", bytes);
 #endif
         var barcode = z.Decode(bytes, "QR_CODE");

@@ -160,11 +160,11 @@ namespace AGV.ZXing {
                         Mode = ResizeMode.BoxPad,
                         PadColor = Color.White,
                         Position = AnchorPositionMode.Top,
-                        Size = new Size(image.Width, (int)(image.Height + font.Size + 1))
+                        Size = new Size(image.Width, (int)(image.Height + font.Size + 4))
                     };
-                    var h = image.Height+1;
+                    var h = image.Height + 4;
                     var w = image.Width;
-                    image.Mutate(x => x.Resize(o).DrawText(contents,font,Color.Black,new PointF(w/2 - TextMeasurer.Measure(contents, new(font){}).Width/2,h)));
+                    image.Mutate(x => x.Resize(o).DrawText(contents,font,Color.Black,new PointF(w/2 - TextMeasurer.MeasureSize(contents, new(font){}).Width/2,h)));
                 }
             }
 
@@ -250,14 +250,14 @@ namespace AGV.ZXing {
                 }
                 
                 var points = result.ResultPoints.ToList().ConvertAll(new Converter<ResultPoint, PointF>(x => new PointF(x.X, x.Y)));
-                var pen = new Pen(Color.LimeGreen, 2);
+                var pen = Pens.Solid(Color.LimeGreen, 2);
 
                 switch(points.Count) {
                     case 2:
-                        img.Mutate(x => x.DrawLines(pen, points.ToArray()));
+                        img.Mutate(x => x.DrawLine(pen, points.ToArray()));
                     break;
                     case 4:
-                        img.Mutate(x => x.DrawLines(pen, points.ToArray()));
+                        img.Mutate(x => x.DrawPolygon(pen, points.ToArray()));
                     break;
                     default:
                         if (points.Count % 2 == 0) {
