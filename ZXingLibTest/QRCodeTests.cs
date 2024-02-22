@@ -16,7 +16,7 @@ public class QRCodeTests
     [Category("QRCode")]
     public void TestEncode_Overlay(string? ecl)
     {
-        var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, true, false, true, "UTF-8", ecl, null, this.overlay);
+        var bytes = z.Encode("https://www.outsystems.com", "QR_CODE", 330, 330, 0, true, false, true, "UTF-8", ecl, null, this.overlay, null);
 #if DEBUG
         File.WriteAllBytes($"output/qrcode/overlay_{ecl??"null"}.png", bytes);
 #endif

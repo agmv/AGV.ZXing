@@ -12,6 +12,8 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
 using AGV.ZXing.Structures;
+using ZXing.Datamatrix;
+using ZXing.Datamatrix.Encoder;
 
 namespace AGV.ZXing {
 
@@ -89,7 +91,7 @@ namespace AGV.ZXing {
         }
 
         public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format, 
-        bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string outputFormat = "PNG") {
+        bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string? forceShape, string outputFormat = "PNG") {
             var f = Enum.Parse<BarcodeFormat>(format);
             if ((f == BarcodeFormat.EAN_13 || f == BarcodeFormat.UPC_A) && (margin < 6)) {
                 throw new Exception("EAN-13 and UPC-A codes should have a margin greater than 6 to ensure barcode can be scanned properly.");
@@ -112,6 +114,10 @@ namespace AGV.ZXing {
 
             if (f == BarcodeFormat.QR_CODE && qRCodeVersion != null && qRCodeVersion != 0)
                 options.Hints.Add(EncodeHintType.QR_VERSION, qRCodeVersion);
+
+            if (f == BarcodeFormat.DATA_MATRIX && forceShape != null){
+                options.Hints.Add(EncodeHintType.DATA_MATRIX_SHAPE, forceShape == "square" ? SymbolShapeHint.FORCE_SQUARE : forceShape == "rectangle" ? SymbolShapeHint.FORCE_RECTANGLE : SymbolShapeHint.FORCE_NONE);
+            }
 
             // if (SVG) {
             //     var w = new BarcodeWriterSvg(){ Format = f, Options = options};
@@ -214,7 +220,7 @@ namespace AGV.ZXing {
 
         public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
-            return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage);
+            return Encode(isFacetime?$"facetime:{phoneNumber}":$"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, null, outputFormat);
         }
 
         public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null, string outputFormat = "PNG")

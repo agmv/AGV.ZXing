@@ -14,7 +14,7 @@ public class ImageFormatTests
     public void TestImageFormats(string format)
     {
         var contents = "This is a test";
-        var bytes = z.Encode(contents, "CODE_128", 300, 100, 10, true, false, false, "UTF-8", null, null, null);
+        var bytes = z.Encode(contents, "CODE_128", 300, 100, 10, true, false, false, "UTF-8", null, null, null, null);
 #if DEBUG
         File.WriteAllBytes($"output/imageformat/image_{format}.{format}", bytes);
 #endif

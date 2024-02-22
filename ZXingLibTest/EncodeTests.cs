@@ -21,7 +21,7 @@ public class EncodeTests
     [Category("Encode")]
     public void TestEncode_1D(string contents, string format, bool canDecode = true)
     {
-        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, false, "UTF-8", null, null, null);
+        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, false, "UTF-8", null, null, null, null);
 #if DEBUG
         File.WriteAllBytes($"output/1d/{format}.png", bytes);
 #endif
@@ -35,14 +35,15 @@ public class EncodeTests
 
     [Test(Description = "Executes tests for encoding GS1 barcodes")]
     [TestCase("CODE_128")]
-    [TestCase("DATA_MATRIX")]
+    [TestCase("DATA_MATRIX", "square")]
+    [TestCase("DATA_MATRIX", "rectangle")]
     [Category("Encode")]
-    public void TestEncode_GS1(string format)
+    public void TestEncode_GS1(string format, string? forceShape = null)
     {
         var contents = format == "CODE_123" ? $"{(char)0x00F1}01234567890{(char)0x00F1}45678" : $"{(char)29}01234567890{(char)29}45678";
-        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, true, "UTF-8", null, null, null);
+        var bytes = z.Encode(contents, format, 300, 100, 10, true, false, true, "UTF-8", null, null, null, forceShape);
 #if DEBUG
-        File.WriteAllBytes($"output/gs1/{format}_GS1.png", bytes);
+        File.WriteAllBytes($"output/gs1/{format}_{forceShape}_GS1.png", bytes);
 #endif
         var barcode = z.Decode(bytes, format);
         Assert.That(barcode, Is.Not.Null);
@@ -52,16 +53,16 @@ public class EncodeTests
 
     [Test(Description = "Executes tests for 2D barcodes")]
     [TestCase("test", "AZTEC")]
-    [TestCase("␝01234567890␝45678", "DATA_MATRIX")]
+    [TestCase("␝01234567890␝45678", "DATA_MATRIX", null, "square")]
     [TestCase("test", "PDF_417")]
     [TestCase("This is a test", "QR_CODE", "L")]
     [TestCase("This is a test", "QR_CODE", "M")]
     [TestCase("This is a test", "QR_CODE", "Q")]
     [TestCase("This is a test", "QR_CODE", "H")]
     [Category("Encode")]
-    public void TestEncode_2D(string contents, string format, string? ecl = null)
+    public void TestEncode_2D(string contents, string format, string? ecl = null, string? forceShape = null)
     {
-        var bytes = z.Encode(contents, format, 200, 200, 10, true, false, false, "UTF-8", ecl, null, null);
+        var bytes = z.Encode(contents, format, 200, 200, 10, true, false, false, "UTF-8", ecl, null, null, forceShape);
 #if DEBUG
         File.WriteAllBytes($"output/2d/{format}.png", bytes);
 #endif
@@ -87,7 +88,7 @@ public class EncodeTests
     [Category("BarcodeLabel")]
     public void TestEncode_NotPureBarcode(string contents, string format, bool canDecode = true)
     {
-        var bytes = z.Encode(contents, format, 300, 100, 10, false, false, false, "UTF-8", null, null, null);
+        var bytes = z.Encode(contents, format, 300, 100, 10, false, false, false, "UTF-8", null, null, null, null);
         var img = SixLabors.ImageSharp.Image.Load(new MemoryStream(bytes));
 #if DEBUG
         File.WriteAllBytes($"output/withlabel/{format}_label.png", bytes);

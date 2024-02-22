@@ -60,6 +60,8 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             int? qRCodeVersion = null,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
+            [OSParameter(Description = "For datamatrix barcodes only. Possible values are none, square, and rectangle. Forces the barcode shape to be a square, a rectangle, or doesn't force it.")]
+            string? forceShape = "none",
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
 
