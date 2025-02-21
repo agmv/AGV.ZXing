@@ -39,9 +39,7 @@
     <EmbeddedResource Include="resources/maxicode.png" />
     <EmbeddedResource Include="resources/imb.png" />
     <EmbeddedResource Include="resources/pharmacode.png" />
-
     <EmbeddedResource Include="resources/multi-1d.jpg" />
-    
     <EmbeddedResource Include="resources/osring.png" />
   </ItemGroup>
 

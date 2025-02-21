@@ -8,7 +8,7 @@ namespace AGV.ZXing.Tests
     {
         private ZXingLib z = Tests.zxing;
 
-        byte[] overlay = Utils.LoadResource("ZXingLibTest.resources.osring.png");
+        byte[] overlay = Utils.LoadResource("AGV.ZXing.Tests.resources.osring.png");
 
         [Test(Description = "Execute tests with overlays")]
         [TestCase("Q")]

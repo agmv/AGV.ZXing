@@ -9,7 +9,7 @@ namespace AGV.ZXing.Tests
         public static byte[] LoadResource(string resourceName)
         {
             Stream? s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName) ?? throw new Exception();
-            var ms = new MemoryStream();
+            using MemoryStream ms = new();
             s.CopyTo(ms);
             return ms.ToArray();
         }

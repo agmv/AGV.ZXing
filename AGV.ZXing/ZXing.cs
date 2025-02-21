@@ -27,6 +27,13 @@ namespace AGV.ZXing
                         BarcodeFormat.ITF, BarcodeFormat.CODABAR, BarcodeFormat.MSI, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED,
                         BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417,
                         BarcodeFormat.MAXICODE, BarcodeFormat.IMB ];
+        
+        // Known issue with MaxiCode reader in DecodeMulti - https://github.com/micjahn/ZXing.Net/issues/479
+        readonly BarcodeFormat[] decodersMulti = [ BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
+                        BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.CODE_39, BarcodeFormat.CODE_93, BarcodeFormat.CODE_128,
+                        BarcodeFormat.ITF, BarcodeFormat.CODABAR, BarcodeFormat.MSI, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED,
+                        BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.PDF_417,
+                        BarcodeFormat.IMB ];
 
         // The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix
         readonly BarcodeFormat[] encoders = [ BarcodeFormat.UPC_A,
@@ -110,9 +117,10 @@ namespace AGV.ZXing
             }
             else
             {
-                reader.Options.PossibleFormats = decoders;
+                reader.Options.PossibleFormats = decodersMulti;
             }
-            using Image<Rgba32> img = Image.Load<Rgba32>(new MemoryStream(image));
+            using MemoryStream ms = new (image);
+            using Image<Rgba32> img = Image.Load<Rgba32>(ms);
             var result = reader.DecodeMultiple(img);
             using Image<Rgba32>? clone = detectionImage ? img.Clone() : null;
             if (result != null)
