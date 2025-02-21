@@ -1,36 +1,39 @@
 ﻿using System.Collections.Generic;
+using AGV.ZXing.Structures;
 using OutSystems.ExternalLibraries.SDK;
 
-namespace AGV.ZXing {
+namespace AGV.ZXing
+{
 
     [OSInterface(Description = @"Provides actions to encode and decode barcodes. 
 The following barcodes are supported by the decoder: UPC-A, UPC-E, EAN-8, EAN-13, Code 39, Code 93, Code 128, ITF, Codabar, MSI, RSS-14 (all variants), QR Code, Data Matrix, Aztec, and PDF-417. The encoder supports the following formats: UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PDF-417, Aztec, Data Matrix.
-Source code can be found in git - https://github.com/agmv/AGV.ZXing", 
+Source code can be found in git - https://github.com/agmv/AGV.ZXing",
     IconResourceName = "AGV.ZXing.resources.zxing.png", Name = "ZXingLib")]
-    public interface IZXingLib {        
+    public interface IZXingLib
+    {
         [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcode", ReturnDescription = "The decoded barcode")]
-        public Structures.Barcode? Decode(
-            [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]            
+        public Barcode? Decode(
+            [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]
             byte[] image,
-            [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
+            [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")]
             string? formatHint = null,
-            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
+            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")]
             bool detectionImage = false);
 
         [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes", ReturnDescription = "A list of the decoded barcodes")]
-        public IEnumerable<Structures.Barcode>? DecodeMulti(
+        public IEnumerable<Barcode>? DecodeMulti(
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Image containing the barcode")]
             byte[] image,
-            [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")] 
+            [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")]
             string? formatHint = null,
-            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")] 
+            [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")]
             bool detectionImage = false);
 
         [OSAction(Description = "Supported barcode encoding formats", IconResourceName = "AGV.ZXing.resources.encoders.png", ReturnName = "Formats", ReturnDescription = "The list of supported barcode encoding formats")]
         public string[] Encoders();
 
 
-        [OSAction(Description = "Generates a barcode with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png", 
+        [OSAction(Description = "Generates a barcode with the received input data", IconResourceName = "AGV.ZXing.resources.qr_code.png",
                     ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] Encode(
             [OSParameter(DataType = OSDataType.Text, Description = "Contents to encode as a barcode")]
@@ -56,8 +59,8 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             For Aztec it is integer representing the minimal percentage of error correction words. Note: an Aztec symbol should have a minimum of 25% EC words. 
             For PDF417 it is integer between 0 and 8")]
             string? ecl = null,
-            [OSParameter(DataType = OSDataType.Integer, Description = "Specifies the exact version of QR code to be encoded.")]
-            int? qRCodeVersion = null,
+            [OSParameter(DataType = OSDataType.Text, Description = "Specifies the exact version of QR code to be encoded. An integer, range 1 to 40.")]
+            int? qRCodeVersion = 0,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "For datamatrix barcodes only. Possible values are none, square, and rectangle. Forces the barcode shape to be a square, a rectangle, or doesn't force it.")]
@@ -65,45 +68,45 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
 
-        [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.event.png", 
+        [OSAction(Description = "Generates a barcode with the received calendar event data", IconResourceName = "AGV.ZXing.resources.event.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeCalendarEvent(
             [OSParameter(Description = "Calendar event to encode as a barcode")]
-            Structures.CalendarEvent calendarEvent,
+            CalendarEvent calendarEvent,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
 
-        [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.contact.png", 
+        [OSAction(Description = "Generates a barcode with the received contact data", IconResourceName = "AGV.ZXing.resources.contact.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeContact(
             [OSParameter(Description = "Contact to encode as a barcode")]
-            Structures.Contact contact,
+            Contact contact,
             [OSParameter(DataType = OSDataType.Boolean, Description = "Indicates if it uses MECARD format instead of VCARD format")]
             bool isMeCard,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-        
-        [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.email.png", 
+
+        [OSAction(Description = "Generates a barcode with the received email address", IconResourceName = "AGV.ZXing.resources.email.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeEmail(
             [OSParameter(DataType = OSDataType.Text, Description = "Email to encode")]
             string email,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-            
-        [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.gps.png", 
+
+        [OSAction(Description = "Generates a barcode with the received geo location", IconResourceName = "AGV.ZXing.resources.gps.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeLocation(
             [OSParameter(DataType = OSDataType.Text, Description = "Latitude")]
@@ -111,13 +114,13 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(DataType = OSDataType.Text, Description = "Longitude")]
             string longitude,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-            
-        [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png", 
+
+        [OSAction(Description = "Generates a barcode with the received phone number", IconResourceName = "AGV.ZXing.resources.phone.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodePhoneNumber(
             [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number to encode")]
@@ -125,13 +128,13 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(DataType = OSDataType.Boolean, Description = "Indicates if it generates a facetime call")]
             bool isFacetime,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-            
-        [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png", 
+
+        [OSAction(Description = "Generates a barcode with the received SMS content", IconResourceName = "AGV.ZXing.resources.sms.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeSMS(
             [OSParameter(DataType = OSDataType.PhoneNumber, Description = "Phone number")]
@@ -139,23 +142,23 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(DataType = OSDataType.Text, Description = "Message")]
             string message,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-            
-        [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.wifi.png", 
+
+        [OSAction(Description = "Generates a barcode with the Wifi connection information", IconResourceName = "AGV.ZXing.resources.wifi.png",
                 ReturnName = "BarcodeImage", ReturnType = OSDataType.BinaryData, ReturnDescription = "The encoded barcode binary")]
         public byte[] EncodeWifi(
             [OSParameter(Description = "Wifi data")]
-            Structures.Wifi wifi,
+            Wifi wifi,
             [OSParameter(DataType = OSDataType.Integer, Description = "Width of the barcode image")]
-            int size,            
+            int size,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
             [OSParameter(Description = "Output image format, e.g. PNG. Default: PNG. Supported formats: PNG,GIF,WEBP,JPG,BMP.")]
             string outputFormat = "PNG");
-            
+
     }
 }

@@ -13,7 +13,7 @@ Additionally this library also provides accelerators to generate QR Codes encodi
 Scans barcode from a given image.
 
 ```csharp
-Structures.Barcode? Decode(byte[] image, string? formatHint)
+Barcode? Decode(byte[] image, string? formatHint)
 ```
 | Parameter | Description |
 |-|-|
@@ -27,7 +27,7 @@ Return type [`Barcode`](#barcode).
 
 Scans barcode from a given image.
 ```csharp
-IEnumerable<Structures.Barcode>? DecodeMulti(byte[] image, string? formatHint)
+IEnumerable<Barcode>? DecodeMulti(byte[] image, string? formatHint)
 ```
 | Parameter | Description |
 |-|-|
