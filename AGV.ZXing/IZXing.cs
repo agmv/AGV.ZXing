@@ -59,7 +59,7 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             For Aztec it is integer representing the minimal percentage of error correction words. Note: an Aztec symbol should have a minimum of 25% EC words. 
             For PDF417 it is integer between 0 and 8")]
             string? ecl = null,
-            [OSParameter(DataType = OSDataType.Text, Description = "Specifies the exact version of QR code to be encoded. An integer, range 1 to 40.")]
+            [OSParameter(DataType = OSDataType.Integer, Description = "Specifies the exact version of QR code to be encoded. An integer, range 1 to 40.")]
             int? qRCodeVersion = 0,
             [OSParameter(DataType = OSDataType.BinaryData, Description = "Overlay image for QR Code.")]
             byte[]? overlayImage = null,
