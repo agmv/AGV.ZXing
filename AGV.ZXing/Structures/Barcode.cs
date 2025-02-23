@@ -10,7 +10,7 @@ namespace AGV.ZXing.Structures
         [OSStructureField(DataType = OSDataType.Text, Description = "Barcode decoded value")]
         public string value;
 
-        [OSStructureField(Description = "Barcode raw bytes")]
+        [OSStructureField(DataType = OSDataType.BinaryData, Description = "Barcode raw bytes")]
         public byte[]? rawBytes;
 
         [OSStructureField(DataType = OSDataType.Text, Description = "Barcode format")]
@@ -19,7 +19,7 @@ namespace AGV.ZXing.Structures
         [OSStructureField(Description = "Metadata associated with the decoded barcode")]
         public IEnumerable<Metadata> metadata;
 
-        [OSStructureField(Description = "Original image with a bounding rectangle on the detected barcode")]
+        [OSStructureField(DataType = OSDataType.BinaryData, Description = "Original image with a bounding rectangle on the detected barcode")]
         public byte[]? detectedBarcode;
 
         public Barcode(Barcode b) : this()
