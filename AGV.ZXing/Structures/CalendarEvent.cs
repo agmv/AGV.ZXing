@@ -71,8 +71,8 @@ namespace AGV.ZXing.Structures
 
         public override readonly string ToString()
         {
-            var start = new CalDateTime(startDateTime);
-            var end = new CalDateTime(endDateTime);
+            var start = new CalDateTime(startDateTime, !isAllDay);
+            var end = new CalDateTime(endDateTime, !isAllDay);
             var organizer = this.organizer != "" ? new Organizer { CommonName = this.organizer } : null;
 
             var e = new Ical.Net.CalendarComponents.CalendarEvent
@@ -82,7 +82,6 @@ namespace AGV.ZXing.Structures
                 End = end,
                 Location = location,
                 Description = description,
-                IsAllDay = isAllDay,
                 Class = eventClass,
                 Organizer = organizer,
                 Priority = priority,
@@ -91,7 +90,8 @@ namespace AGV.ZXing.Structures
             };
             var c = new Calendar();
             c.Events.Add(e);
-            return new CalendarSerializer(c).SerializeToString();
+            var cs = new CalendarSerializer(c);
+            return cs.SerializeToString() ?? "";            
         }
 
     }
