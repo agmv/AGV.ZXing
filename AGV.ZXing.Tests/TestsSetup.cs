@@ -1,10 +1,12 @@
+using Microsoft.Extensions.Logging.Abstractions;
+
 namespace AGV.ZXing.Tests
 {
     [SetUpFixture]
     public class Tests
     {
 
-        public static ZXingLib zxing = new ZXingLib();
+        public static ZXingLib zxing = new ZXingLib(NullLogger.Instance);
 
         [OneTimeSetUp]
         public void GlobalSetUp()

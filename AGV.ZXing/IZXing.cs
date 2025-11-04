@@ -18,7 +18,9 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")]
             string? formatHint = null,
             [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")]
-            bool detectionImage = false);
+            bool detectionImage = false,
+            [OSParameter(DataType = OSDataType.Text, Description = "Specifies what character encoding to use where applicable, e.g. UTF-8, ISO-8859-1")]
+            string? encoding = null);
 
         [OSAction(Description = @"Scans barcode from an image", IconResourceName = "AGV.ZXing.resources.qr_code_scanner.png", ReturnName = "Barcodes", ReturnDescription = "A list of the decoded barcodes")]
         public IEnumerable<Barcode>? DecodeMulti(
@@ -27,7 +29,9 @@ Source code can be found in git - https://github.com/agmv/AGV.ZXing",
             [OSParameter(DataType = OSDataType.Text, Description = "A hint for the barcode format present in the image")]
             string? formatHint = null,
             [OSParameter(DataType = OSDataType.Boolean, Description = "If true, the action will return the original image with barcode detection marks.")]
-            bool detectionImage = false);
+            bool detectionImage = false,
+            [OSParameter(DataType = OSDataType.Text, Description = "Specifies what character encoding to use where applicable, e.g. UTF-8, ISO-8859-1")]
+            string? encoding = null);
 
         [OSAction(Description = "Supported barcode encoding formats", IconResourceName = "AGV.ZXing.resources.encoders.png", ReturnName = "Formats", ReturnDescription = "The list of supported barcode encoding formats")]
         public string[] Encoders();

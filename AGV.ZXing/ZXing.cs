@@ -13,6 +13,8 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
 using AGV.ZXing.Structures;
 using ZXing.Datamatrix.Encoder;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace AGV.ZXing
 {
@@ -45,15 +47,23 @@ namespace AGV.ZXing
             BarcodeFormat.EAN_8, BarcodeFormat.EAN_13, BarcodeFormat.ITF, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED, BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
             BarcodeFormat.PLESSEY, BarcodeFormat.MSI ];
 
-        public Barcode? Decode(byte[] image, string? formatHint, bool detectionImage = false)
-        {
+        private readonly ILogger _logger;
 
+        public ZXingLib(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        public Barcode? Decode(byte[] image, string? formatHint, bool detectionImage = false, string? encoding = "UTF-8")
+        {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.Decode");
+            _logger.LogInformation("Decoding barcode with ZXing");
+            
             var reader = new BarcodeReaderGeneric
             {
                 AutoRotate = true,
                 Options = new DecodingOptions
                 {
-                    CharacterSet = "UTF-8",
                     ReturnCodabarStartEnd = true,
                     TryHarder = true,
                     TryInverted = true,
@@ -61,6 +71,9 @@ namespace AGV.ZXing
                     UseCode39ExtendedMode = true
                 }
             };
+            
+            reader.Options.CharacterSet = encoding ?? "UTF-8";
+
             if (formatHint != null && formatHint != "")
             {
                 reader.Options.PossibleFormats = [Enum.Parse<BarcodeFormat>(formatHint)];
@@ -74,36 +87,26 @@ namespace AGV.ZXing
             var result = reader.Decode(img);
             if (result != null)
             {
-                if (detectionImage)
-                {
-                    using Image<Rgba32> clone = img.Clone();
-                    return new Barcode(result.Text,
-                                        result.RawBytes,
-                                        result.BarcodeFormat.ToString(),
-                                        ConvertMetadata(result.ResultMetadata),
-                                        GenerateMarksImage(result, clone));
-                }
-                else
-                {
-                    return new Barcode(result.Text,
-                                        result.RawBytes,
-                                        result.BarcodeFormat.ToString(),
-                                        ConvertMetadata(result.ResultMetadata),
-                                        null);
-                }
+                return new Barcode(result.Text,
+                                    result.RawBytes,
+                                    result.BarcodeFormat.ToString(),
+                                    ConvertMetadata(result.ResultMetadata),
+                                    detectionImage ? GenerateMarksImage(result, img.Clone()) : null);
             }
             return null;
         }
 
 
-        public IEnumerable<Barcode>? DecodeMulti(byte[] image, string? formatHint, bool detectionImage = false)
+        public IEnumerable<Barcode>? DecodeMulti(byte[] image, string? formatHint, bool detectionImage = false, string? encoding = "UTF-8")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.DecodeMulti");
+            _logger.LogInformation("Decoding multiple barcodes with ZXing");
+
             var reader = new BarcodeReaderGeneric
             {
                 AutoRotate = true,
                 Options = new DecodingOptions
                 {
-                    CharacterSet = "UTF-8",
                     ReturnCodabarStartEnd = true,
                     TryHarder = true,
                     TryInverted = true,
@@ -111,6 +114,9 @@ namespace AGV.ZXing
                     UseCode39ExtendedMode = true
                 }
             };
+
+            reader.Options.CharacterSet = encoding ?? "UTF-8";
+
             if (formatHint != null && formatHint != "")
             {
                 reader.Options.PossibleFormats = [Enum.Parse<BarcodeFormat>(formatHint)];
@@ -138,6 +144,9 @@ namespace AGV.ZXing
         public byte[] Encode(string contents, string format, int width, int height, int margin, bool pureBarcode, bool gS1Format,
         bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string? forceShape, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.Encode");
+            _logger.LogInformation("Encoding barcode with ZXing");
+            
             var f = Enum.Parse<BarcodeFormat>(format);
             if ((f == BarcodeFormat.EAN_13 || f == BarcodeFormat.UPC_A) && (margin < 6))
             {
@@ -151,7 +160,7 @@ namespace AGV.ZXing
                 Margin = margin,
                 PureBarcode = pureBarcode,
                 GS1Format = gS1Format,
-                NoPadding = noPadding
+                NoPadding = noPadding,
             };
 
             if (encoding != null && encoding != "")
@@ -249,41 +258,49 @@ namespace AGV.ZXing
 
         public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeCalendarEvent");
             return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeContact");
             return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeEmail(string email, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeEmail");
             return Encode($"mailto:{email}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeLocation");
             return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodePhoneNumber");
             return Encode(isFacetime ? $"facetime:{phoneNumber}" : $"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, null, outputFormat);
         }
 
         public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeSMS");
             return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeWifi");
             return Encode(wifi.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         protected static Metadata[] ConvertMetadata(IDictionary<ResultMetadataType, object> metadata)
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.ConvertMetadata");
             var l = new List<Metadata>(metadata.Count);
             foreach (var m in metadata)
             {
@@ -299,6 +316,7 @@ namespace AGV.ZXing
 
         protected static byte[]? GenerateMarksImage(Result result, Image<Rgba32> img)
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.GenerateMarksImage");
             if (result.ResultPoints.Length > 1)
             {
                 using MemoryStream stream = new();
@@ -347,13 +365,14 @@ namespace AGV.ZXing
 
         public string[] Encoders()
         {
+            using var activity = Activity.Current?.Source.StartActivity("ZXing.Encoders");            
             return Array.ConvertAll(encoders, x => x.ToString());
         }
 
     }
 
     public static class StringExtension
-    {
+    {        
         public static string EncodeQRCode(this string s)
         {
             return s.Replace(",", @"\,").Replace(";", @"\;").ReplaceLineEndings(@"\n").Replace(@"\", @"\\").Replace(@"""", @"\""").Replace(":", @"\:");
