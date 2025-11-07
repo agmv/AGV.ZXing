@@ -1,0 +1,4 @@
+[*.cs]
+
+# NonInstantiableInterface: Non-instantiable interface
+dotnet_diagnostic.NonInstantiableInterface.severity = none
