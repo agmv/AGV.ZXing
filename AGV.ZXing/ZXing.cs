@@ -53,7 +53,7 @@ namespace AGV.ZXing
         public Barcode? Decode(byte[] image, string? formatHint, bool detectionImage = false, string? encoding = "UTF-8")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.Decode");
-            _logger.LogInformation("Decoding barcode with ZXing");
+            _logger.LogInformation($"Decoding barcode with ZXing.\nImage {image.Length} bytes, formatHint {formatHint}, generate detection image {detectionImage}, encoding {encoding}");
             
             var reader = new BarcodeReaderGeneric
             {
@@ -83,6 +83,7 @@ namespace AGV.ZXing
             var result = reader.Decode(img);
             if (result != null)
             {
+                _logger.LogInformation($"Barcode decoded: {result.Text}, format: {result.BarcodeFormat}");
                 return new Barcode(result.Text,
                                     result.RawBytes,
                                     result.BarcodeFormat.ToString(),
@@ -96,7 +97,7 @@ namespace AGV.ZXing
         public IEnumerable<Barcode>? DecodeMulti(byte[] image, string? formatHint, bool detectionImage = false, string? encoding = "UTF-8")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.DecodeMulti");
-            _logger.LogInformation("Decoding multiple barcodes with ZXing");
+            _logger.LogInformation($"Decoding multiple barcodes with ZXing.\nImage {image.Length} bytes, formatHint {formatHint}, generate detection image {detectionImage}, encoding {encoding}");
 
             var reader = new BarcodeReaderGeneric
             {
@@ -127,6 +128,7 @@ namespace AGV.ZXing
             using Image<Rgba32>? clone = detectionImage ? img.Clone() : null;
             if (result != null)
             {
+                _logger.LogInformation($"Barcodes decoded ({result.Length}). Formats: {string.Join(", ", Array.ConvertAll(result, r => r.BarcodeFormat.ToString()))}");
                 return Array.ConvertAll(result, r => new Barcode(r.Text,
                                             r.RawBytes,
                                             r.BarcodeFormat.ToString(),
@@ -141,7 +143,8 @@ namespace AGV.ZXing
         bool noPadding, string? encoding, string? ecl, int? qRCodeVersion, byte[]? overlayImage, string? forceShape, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.Encode");
-            _logger.LogInformation("Encoding barcode with ZXing");
+            _logger.LogInformation("Encoding barcode with ZXing.\nContent: {contents}, format: {format}, width: {width}, height: {height}, margin: {margin}, pureBarcode: {pureBarcode}, GS1Format: {gS1Format}, noPadding: {noPadding}, encoding: {encoding}, ecl: {ecl}, qRCodeVersion: {qRCodeVersion}, overlayImage: {(overlayImage != null ? overlayImage.Length : 0)} bytes, forceShape: {forceShape}, outputFormat: {outputFormat}",
+                contents, format, width, height, margin, pureBarcode, gS1Format, noPadding, encoding, ecl, qRCodeVersion, overlayImage, forceShape, outputFormat);
             
             var bcFormat = Enum.Parse<BarcodeFormat>(format);
             if ((bcFormat == BarcodeFormat.EAN_13 || bcFormat == BarcodeFormat.UPC_A) && (margin < 6))
@@ -178,10 +181,12 @@ namespace AGV.ZXing
             var barcode = writer.Encode(contents);
             var render = new ImageSharpRenderer<Rgba32>();
             using Image<Rgba32> image = render.Render(barcode, bcFormat, contents);
+            _logger.LogInformation("Barcode image generated. Size: {width}x{height}", image.Width, image.Height);
 
             if (bcFormat == BarcodeFormat.QR_CODE && overlayImage != null && overlayImage.Length != 0)
             {
                 using Image overlay = Image.Load(new MemoryStream(overlayImage));
+                _logger.LogInformation("Adding overlay to QR code. Overlay size: {width}x{height}, QR code size: {qrWidth}x{qrHeight}", overlay.Width, overlay.Height, image.Width, image.Height);
 
                 //Check overlay coverage on top of QR code. Too much may lead to barcode not being readable.
                 var ratio = (overlay.Width * overlay.Height) / (image.Width * image.Height * 1.0);
@@ -201,6 +206,7 @@ namespace AGV.ZXing
 
             if (!pureBarcode && pureBC.Contains(bcFormat))
             {
+                _logger.LogInformation("Adding text below the barcode.");
                 using Stream? s = Assembly.GetExecutingAssembly().GetManifestResourceStream("AGV.ZXing.resources.OCRB Regular.ttf");
 
                 if (s != null)
@@ -239,8 +245,10 @@ namespace AGV.ZXing
                 case "png":
                     image.SaveAsPng(stream);
                     break;
-                default:
+                default: {
+                    _logger.LogError("Unsupported output format: {outputFormat}", outputFormat);
                     throw new Exception("Unsupported format");
+                }
             }
             return stream.ToArray();
         }
@@ -248,56 +256,55 @@ namespace AGV.ZXing
         public byte[] EncodeCalendarEvent(CalendarEvent calendarEvent, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeCalendarEvent");
-            _logger.LogInformation("Encoding calendar event with ZXing");
+            _logger.LogInformation("Encoding calendar event with ZXing.\nCalendar Event: {calendar}", calendarEvent.ToString());
             return Encode(calendarEvent.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeContact(Contact contact, bool isMeCard, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeContact");
-            _logger.LogInformation("Encoding contact with ZXing");
+            _logger.LogInformation("Encoding contact with ZXing.\nContact: {contact}", isMeCard?contact.ToMeCardString():contact.ToVCardString());
             return Encode(isMeCard ? contact.ToMeCardString() : contact.ToVCardString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeEmail(string email, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeEmail");
-            _logger.LogInformation("Encoding email with ZXing");
+            _logger.LogInformation("Encoding email with ZXing.\nEmail: {email}", email);
             return Encode($"mailto:{email}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeLocation(string latitude, string longitude, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeLocation");
-            _logger.LogInformation("Encoding location with ZXing");
+            _logger.LogInformation($"Encoding location with ZXing.\nLatitude: {latitude}, Longitude: {longitude}", latitude, longitude);
             return Encode($"geo:{latitude},{longitude}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodePhoneNumber(string phoneNumber, bool isFacetime, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodePhoneNumber");
-            _logger.LogInformation("Encoding phone number with ZXing");
+            _logger.LogInformation($"Encoding phone number with ZXing.\nPhone Number: {phoneNumber}, isFacetime: {isFacetime}", phoneNumber, isFacetime);
             return Encode(isFacetime ? $"facetime:{phoneNumber}" : $"tel:{phoneNumber}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, null, outputFormat);
         }
 
         public byte[] EncodeSMS(string phoneNumber, string message, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeSMS");
-            _logger.LogInformation("Encoding SMS with ZXing");
+            _logger.LogInformation($"Encoding SMS with ZXing.\nPhone Number: {phoneNumber}, Message: {message}", phoneNumber, message);
             return Encode($"smsto:{phoneNumber}:{message}", "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         public byte[] EncodeWifi(Wifi wifi, int size, byte[]? overlayImage = null, string outputFormat = "PNG")
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.EncodeWifi");
-            _logger.LogInformation("Encoding WiFi with ZXing");
+            _logger.LogInformation($"Encoding WiFi with ZXing.\nWiFi: {wifi.ToString()}", wifi.ToString());
             return Encode(wifi.ToString(), "QR_CODE", size, size, 0, true, false, true, "UTF-8", null, null, overlayImage, outputFormat);
         }
 
         protected static Metadata[] ConvertMetadata(IDictionary<ResultMetadataType, object> metadata)
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.ConvertMetadata");
-            activity?.SetTag("MetadataCount", metadata.Count);
             var l = new List<Metadata>(metadata.Count);
             foreach (var m in metadata)
             {
@@ -314,7 +321,6 @@ namespace AGV.ZXing
         protected static byte[]? GenerateMarksImage(Result result, Image<Rgba32> img)
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.GenerateMarksImage");
-            activity?.SetTag("ResultPointsCount", result.ResultPoints.Length);
             if (result.ResultPoints.Length > 1)
             {
                 using MemoryStream stream = new();
@@ -364,7 +370,7 @@ namespace AGV.ZXing
         public string[] Encoders()
         {
             using var activity = Activity.Current?.Source.StartActivity("ZXing.Encoders");
-            _logger.LogInformation("Getting supported encoders from ZXing");
+            _logger.LogInformation("Getting supported encoders from ZXing.\nEncoders: {encoders}", Array.ConvertAll(encoders, x => x.ToString()));
             return Array.ConvertAll(encoders, x => x.ToString());
         }
 
