@@ -44,7 +44,7 @@ jobs:
         with:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
-          customHeaders: '{"Content-Type":"application/form-urlencoded"}'
+          contentType: 'application/x-www-form-urlencoded'          
           data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}'
       - name: Show Response
         run: | 
