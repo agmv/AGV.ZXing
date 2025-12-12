@@ -11,9 +11,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -26,3 +24,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Publish
+      run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o ./publish
+    - uses: montudor/action-zip@v1
+    - name: Create ZIP artifact
+      run: zip -qq -r ZXingLib.zip ./publish
+    - name: Upload ZIP artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ZXingLib
+        path: ZXingLib.zip    
