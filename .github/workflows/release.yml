@@ -21,16 +21,14 @@ jobs:
         run: dotnet build --no-restore
       - name: Publish
         run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o publish
-      - uses: vimtor/action-zip@v1.2
-        with:
-          files: publish/
-          dest: ZXingLib.zip
+      - run: |
+          ls -la publish
       - name: Upload ZIP artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
-        with:
+        with:            
             name: ZXingLib
-            path: ZXingLib.zip
+            path: publish/
       - name: Display Artifact Info
         run: |
           echo "Artifact URL: ${{ steps.upload-artifact.outputs.artifact-url }}"
