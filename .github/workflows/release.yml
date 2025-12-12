@@ -40,14 +40,12 @@ jobs:
     steps:
       - name: Get Access Token
         id: odc-token
-        env:
-          CLIENT_SECRET: ${{ secrets.ODC_CLIENT_SECRET }}
         uses: fjogeleit/http-request-action@v1
         with:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
-          contentType: 'application/x-www-form-urlencoded'          
-          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=$CLIENT_SECRET'
+          contentType: 'application/x-www-form-urlencoded'
+          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}'
       - name: Show Response
         run: | 
           echo "Response: ${{ steps.odc-token.outputs.response }}"
