@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
+        required: true
         type: environment
         description: 'Select the environment'
   push:
@@ -14,8 +15,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     outputs:
-      artifact_path: ${{ steps.upload-artifact.outputs.artifact_path }}
-      artifact_url: ${{ steps.upload-artifact.outputs.artifact_url }}
+      artifact_path: ${{ steps.upload-artifact.outputs.artifact-name }}.zip
+      artifact_url: ${{ steps.upload-artifact.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -37,6 +38,10 @@ jobs:
         with:
             name: ZXingLib
             path: ZXingLib.zip
+      - name: Display Artifact Info
+        run: |
+          echo "Artifact Path: ${{ steps.upload-artifact.outputs.artifact-name }}.zip"
+          echo "Artifact URL: ${{ steps.upload-artifact.outputs.artifact-url }}"
   upload_to_odc:
     runs-on: ubuntu-latest
     needs: publish
