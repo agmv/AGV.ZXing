@@ -45,7 +45,7 @@ jobs:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
           contentType: 'application/x-www-form-urlencoded'
-          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=qUgzcduSCO7S5BXDNuxoo7V9fDUapJqh9%2Bbqb2gNx4s%3D&scope=openid+profile+email'
+          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ vars.ODC_CLIENT_SECRET }}&scope=openid+profile+email'
       - name: Show Response
         run: | 
           echo "Response: ${{ steps.odc-token.outputs.response }}"
