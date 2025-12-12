@@ -9,6 +9,7 @@ on:
 jobs:
     publish:
       runs-on: ubuntu-latest
+      if: github.event_name != 'workflow_dispatch'
       steps:
         - uses: actions/checkout@v4
         - name: Setup .NET
@@ -31,6 +32,8 @@ jobs:
               path: ZXingLib.zip
     odc:
       runs-on: ubuntu-latest
+      env:
+        TOKEN_ENDPOINT: https://login.microsoftonline.com/${{ vars.ODC_TENANT_ID }}/oauth2/v2.0/token
       steps:
         - run: |
             echo '${{ vars.TOKEN_ENDPOINT }}'
