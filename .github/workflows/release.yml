@@ -1,0 +1,29 @@
+
+name: Release
+
+on:
+  push:
+    tags: [ 'v*.*.*' ]
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        if: github.ref_type == 'tag'
+        steps:
+        - name: Download ZIP artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: ZXingLib
+        - name: Create Release
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: v${{ github.ref_name }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Upload ZIP to Release
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: v${{ github.run_number }}
+            files: ZXingLib.zip
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
