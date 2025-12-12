@@ -27,10 +27,10 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Publish
-        run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o ./publish
+        run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained
       - uses: montudor/action-zip@v1
       - name: Create ZIP artifact
-        run: zip -qq -r ZXingLib.zip ./publish
+        run: zip -qq -r ZXingLib.zip ./bin/Release/net8.0/linux-x64/publish/*
       - name: Upload ZIP artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
@@ -49,7 +49,7 @@ jobs:
           url: ${{ vars.BASE_URL }}/identity/.well-known/openid-configuration
           method: 'GET'
       - name: Get Access Token
-        id: odc-token
+        id: access-token
         uses: fjogeleit/http-request-action@v1
         env:
           TOKEN_ENDPOINT: ${{ fromJson(steps.token-endpoint.outputs.response).token_endpoint }}
@@ -57,16 +57,15 @@ jobs:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
           contentType: 'application/x-www-form-urlencoded'
-          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}&scope=openid+profile+email'
+          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}&scope=openid+profile+email'        
       - name: Upload Package to ODC
         id: upload-odc
         uses: fjogeleit/http-request-action@v1
-        env:
-          ACCESS_TOKEN: ${{ fromJson(steps.odc-token.outputs.response).access_token }}
         with:
           url: ${{ vars.BASE_URL }}/api/external-libraries/v1/generation-operations
           method: 'POST'
-          bearerToken: ${{ vars.ACCESS_TOKEN }}
+          customHeaders: |
+            Authorization: Bearer ${{ fromJson(steps.access-token.outputs.response).access_token }}          
           contentType: 'application/json'
           data: |
             {
