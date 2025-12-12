@@ -47,7 +47,7 @@ jobs:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
           contentType: 'application/x-www-form-urlencoded'          
-          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ vars.CLIENT_SECRET }}'
+          data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=$CLIENT_SECRET'
       - name: Show Response
         run: | 
           echo "Response: ${{ steps.odc-token.outputs.response }}"
