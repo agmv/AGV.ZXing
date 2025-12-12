@@ -41,23 +41,20 @@ jobs:
       contents: write
     steps:
       - name: Download ZIP artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: ZXingLib
+          path: artifacts
+      - run: |
+          ls -la artifacts
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           body: "Release of version ${{ github.ref_name }}"
+          files: artifacts/ZXingLib.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload ZIP to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          files: ZXingLib.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
   upload_to_odc:
     runs-on: ubuntu-latest
     needs: release
