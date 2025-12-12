@@ -15,7 +15,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     outputs:
-      artifact_path: ${{ steps.upload-artifact.outputs.artifact-name }}.zip
       artifact_url: ${{ steps.upload-artifact.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +39,6 @@ jobs:
             path: ZXingLib.zip
       - name: Display Artifact Info
         run: |
-          echo "Artifact Path: ${{ steps.upload-artifact.outputs.artifact-name }}.zip"
           echo "Artifact URL: ${{ steps.upload-artifact.outputs.artifact-url }}"
   upload_to_odc:
     runs-on: ubuntu-latest
@@ -74,7 +72,7 @@ jobs:
           contentType: 'application/json'
           data: |
             {
-              "fileName": "${{ needs.publish.outputs.artifact_path }}",
+              "fileName": "ZXingLib.zip",
               "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}",
             }
   # release:
