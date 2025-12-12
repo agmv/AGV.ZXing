@@ -82,30 +82,8 @@ jobs:
           method: 'POST'
           customHeaders: '{ "Authorization": "Bearer ${{ fromJson(steps.access-token.outputs.response).access_token}}" }'
           contentType: 'application/json'
-          data: |
-            {
+          data: | 
+            '{
               "fileName": "ZXingLib.zip",
-              "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}",
-            }
-  # release:
-  #     runs-on: ubuntu-latest
-  #     needs: publish
-  #     if: github.ref_type == 'tag'
-  #     steps:
-  #     - name: Download ZIP artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: ZXingLib
-  #     - name: Create Release
-  #       uses: softprops/action-gh-release@v1
-  #       with:
-  #         tag_name: v${{ github.ref_name }}
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     - name: Upload ZIP to Release
-  #       uses: softprops/action-gh-release@v1
-  #       with:
-  #         tag_name: v${{ github.run_number }}
-  #         files: ZXingLib.zip
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}"
+            }'
