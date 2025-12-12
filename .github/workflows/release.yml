@@ -2,71 +2,74 @@
 name: Release
 
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: 'Select the environment'
   push:
     tags: [ '*' ]
 
-jobs:
-    publish:
-      runs-on: ubuntu-latest
-      if: github.event_name != 'workflow_dispatch'
-      steps:
-        - uses: actions/checkout@v4
-        - name: Setup .NET
-          uses: actions/setup-dotnet@v4
-          with:
-              dotnet-version: 8.0.x
-        - name: Restore dependencies
-          run: dotnet restore
-        - name: Build
-          run: dotnet build --no-restore
-        - name: Publish
-          run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o ./publish
-        - uses: montudor/action-zip@v1
-        - name: Create ZIP artifact
-          run: zip -qq -r ZXingLib.zip ./publish
-        - name: Upload ZIP artifact
-          uses: actions/upload-artifact@v4
-          with:
-              name: ZXingLib
-              path: ZXingLib.zip
-    odc:
-      runs-on: ubuntu-latest
-      env:
-        TOKEN_ENDPOINT: https://login.microsoftonline.com/${{ vars.ODC_TENANT_ID }}/oauth2/v2.0/token
-      steps:
-        - run: |
-            echo '${{ vars.TOKEN_ENDPOINT }}'
-        # - name: Obtain Token
-        #   id: odc-token
-        #   uses: fjogeleit/http-request-action@v1
-        #   with:
-        #       url: ${{ vars.TOKEN_ENDPOINT }}
-        #       method: 'POST'
-        #       headers: '{"Content-Type":"application/form-urlencoded"}'
-        #       body: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}'
-        # - name: Show Response
-        #   run: | 
-        #   echo "Response: ${{ steps.odc-token.outputs.response }}"
-    # release:
-    #     runs-on: ubuntu-latest
-    #     needs: publish
-    #     if: github.ref_type == 'tag'
-    #     steps:
-    #     - name: Download ZIP artifact
-    #       uses: actions/download-artifact@v4
-    #       with:
-    #         name: ZXingLib
-    #     - name: Create Release
-    #       uses: softprops/action-gh-release@v1
-    #       with:
-    #         tag_name: v${{ github.ref_name }}
-    #       env:
-    #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     - name: Upload ZIP to Release
-    #       uses: softprops/action-gh-release@v1
-    #       with:
-    #         tag_name: v${{ github.run_number }}
-    #         files: ZXingLib.zip
-    #       env:
-    #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:  
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Publish
+        run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o ./publish
+      - uses: montudor/action-zip@v1
+      - name: Create ZIP artifact
+        run: zip -qq -r ZXingLib.zip ./publish
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: ZXingLib
+            path: ZXingLib.zip
+  odc:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}    
+    steps:
+      - run: |
+          echo '${{ vars.TOKEN_ENDPOINT }}'
+      # - name: Obtain Token
+      #   id: odc-token
+      #   uses: fjogeleit/http-request-action@v1
+      #   with:
+      #       url: ${{ vars.TOKEN_ENDPOINT }}
+      #       method: 'POST'
+      #       headers: '{"Content-Type":"application/form-urlencoded"}'
+      #       body: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}'
+      # - name: Show Response
+      #   run: | 
+      #   echo "Response: ${{ steps.odc-token.outputs.response }}"
+  # release:
+  #     runs-on: ubuntu-latest
+  #     needs: publish
+  #     if: github.ref_type == 'tag'
+  #     steps:
+  #     - name: Download ZIP artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: ZXingLib
+  #     - name: Create Release
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         tag_name: v${{ github.ref_name }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Upload ZIP to Release
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         tag_name: v${{ github.run_number }}
+  #         files: ZXingLib.zip
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
