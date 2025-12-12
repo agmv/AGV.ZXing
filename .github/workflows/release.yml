@@ -7,15 +7,15 @@ on:
       environment:
         type: environment
         description: 'Select the environment'
-      tag:
-        type: string
-        description: 'Select the tag to release'
   push:
     tags: [ '*' ]
 
 jobs:  
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_path: ${{ steps.upload-artifact.outputs.artifact_path }}
+      artifact_url: ${{ steps.upload-artifact.outputs.artifact_url }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -32,6 +32,7 @@ jobs:
       - name: Create ZIP artifact
         run: zip -qq -r ZXingLib.zip ./publish
       - name: Upload ZIP artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
             name: ZXingLib
@@ -65,10 +66,11 @@ jobs:
         with:
           url: ${{ vars.BASE_URL }}/api/external-libraries/v1/generation-operations
           method: 'POST'
+          bearerToken: ${{ vars.ACCESS_TOKEN }}
           contentType: 'application/json'
           data: |
             {
-              "fileName": "ZxingLib.zip",
+              "fileName": "${{ needs.publish.outputs.artifact_path }}",
               "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}",
             }
   # release:
