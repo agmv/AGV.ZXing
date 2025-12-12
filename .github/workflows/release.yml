@@ -30,7 +30,7 @@ jobs:
         run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained
       - uses: montudor/action-zip@v1
       - name: Create ZIP artifact
-        run: zip -qq -r ZXingLib.zip ${{ github.workspace }}/bin/Release/net8.0/linux-x64/publish/*
+        run: zip -qq -r ZXingLib.zip ${{ github.workspace }}/bin/Release/net8.0/linux-x64/publish
       - name: Upload ZIP artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
