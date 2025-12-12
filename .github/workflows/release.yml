@@ -7,13 +7,15 @@ on:
       environment:
         type: environment
         description: 'Select the environment'
+      tag:
+        type: string
+        description: 'Select the tag to release'
   push:
     tags: [ '*' ]
 
 jobs:  
   publish:
     runs-on: ubuntu-latest
-    if: github.event_name != 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -36,19 +38,39 @@ jobs:
             path: ZXingLib.zip
   odc:
     runs-on: ubuntu-latest
+    needs: publish
     environment: ${{ inputs.environment }}    
     steps:
+      - name: Get Token Endpoint
+        id: token-endpoint
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ vars.BASE_URL }}/identity/.well-known/openid-configuration
+          method: 'GET'
       - name: Get Access Token
         id: odc-token
         uses: fjogeleit/http-request-action@v1
+        env:
+          TOKEN_ENDPOINT: ${{ fromJson(steps.token-endpoint.outputs.response).token_endpoint }}
         with:
           url: ${{ vars.TOKEN_ENDPOINT }}
           method: 'POST'
           contentType: 'application/x-www-form-urlencoded'
           data: 'grant_type=client_credentials&client_id=${{ vars.ODC_CLIENT_ID }}&client_secret=${{ secrets.ODC_CLIENT_SECRET }}&scope=openid+profile+email'
-      - name: Show Response
-        run: | 
-          echo "Response: ${{ steps.odc-token.outputs.response }}"
+      - name: Upload Package to ODC
+        id: upload-odc
+        uses: fjogeleit/http-request-action@v1
+        env:
+          ACCESS_TOKEN: ${{ fromJson(steps.odc-token.outputs.response).access_token }}
+        with:
+          url: ${{ vars.BASE_URL }}/api/external-libraries/v1/generation-operations
+          method: 'POST'
+          contentType: 'application/json'
+          data: |
+            {
+              "fileName": "ZxingLib.zip",
+              "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}",
+            }
   # release:
   #     runs-on: ubuntu-latest
   #     needs: publish
