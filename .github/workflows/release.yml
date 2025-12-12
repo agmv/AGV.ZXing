@@ -21,9 +21,10 @@ jobs:
         run: dotnet build --no-restore
       - name: Publish
         run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o publish
-      - uses: montudor/action-zip@v1
-      - name: Create ZIP artifact
-        run: zip -qq -r ZXingLib.zip publish
+      - uses: vimtor/action-zip@v1.2
+        with:
+          files: publish/
+          dest: ZXingLib.zip
       - name: Upload ZIP artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
@@ -59,8 +60,7 @@ jobs:
         with:
           url: ${{ vars.TENANT_URL }}/api/external-libraries/v1/generation-operations
           method: 'POST'
-          customHeaders: |
-            Authorization: Bearer ${{ fromJson(steps.access-token.outputs.response).access_token }}          
+          customHeaders: '{ "Authorization": "Bearer ${{ fromJson(steps.access-token.outputs.response).access_token}}" }'
           contentType: 'application/json'
           data: |
             {
