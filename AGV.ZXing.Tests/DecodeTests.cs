@@ -42,16 +42,16 @@ namespace AGV.ZXing.Tests
         {
             var barcode = z.Decode(Utils.LoadResource(resourceImage), format, true);            
             var b = barcode.GetValueOrDefault();
-            b.value = b.value.Replace("\u001d", "\\u001d").Replace("\u001e","\\u001e"); // Normalize for comparison
+            b.Value = b.Value.Replace("\u001d", "\\u001d").Replace("\u001e","\\u001e"); // Normalize for comparison
             Assert.Multiple(() =>
             {
                 Assert.That(barcode, Is.Not.Null);
-                Assert.That(b.value, Is.EqualTo(contents));
-                Assert.That(b.format, Is.EqualTo(format));
+                Assert.That(b.Value, Is.EqualTo(contents));
+                Assert.That(b.Format, Is.EqualTo(format));
             });
 #if DEBUG
-            if (b.detectedBarcode != null && b.detectedBarcode.Length > 0)
-                File.WriteAllBytes($"output/decoded/{format}.png", b.detectedBarcode);
+            if (b.DetectedBarcode != null && b.DetectedBarcode.Length > 0)
+                File.WriteAllBytes($"output/decoded/{format}.png", b.DetectedBarcode);
 #endif
         }
 
@@ -70,14 +70,14 @@ namespace AGV.ZXing.Tests
             var barcode = barcodes != null ? barcodes.ElementAt(position) : new Barcode();
             Assert.Multiple(() =>
             {
-                Assert.That(barcode.format, Is.EqualTo(format));
-                Assert.That(barcode.value, Is.EqualTo(value));
+                Assert.That(barcode.Format, Is.EqualTo(format));
+                Assert.That(barcode.Value, Is.EqualTo(value));
             });
             if (metadatakey != null)
-                Assert.That(barcode.metadata.Any(x => x.key == metadatakey), Is.True);
+                Assert.That(barcode.Metadata.Any(x => x.key == metadatakey), Is.True);
 #if DEBUG
-            if (barcode.detectedBarcode != null && barcode.detectedBarcode.Length > 0)
-                File.WriteAllBytes($"output/decoded/multi1d_{position}_{format}.png", barcode.detectedBarcode);
+            if (barcode.DetectedBarcode != null && barcode.DetectedBarcode.Length > 0)
+                File.WriteAllBytes($"output/decoded/multi1d_{position}_{format}.png", barcode.DetectedBarcode);
 #endif
 
         }

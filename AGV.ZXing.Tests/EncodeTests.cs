@@ -30,7 +30,7 @@ namespace AGV.ZXing.Tests
             {
                 Assert.That(barcode, Is.Not.Null);
                 var b = barcode.GetValueOrDefault();
-                Assert.That(contents, Is.EqualTo(b.value));
+                Assert.That(contents, Is.EqualTo(b.Value));
             }
         }
 
@@ -49,7 +49,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, format);
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo(contents));
+            Assert.That(b.Value, Is.EqualTo(contents));
         }
 
         [Test(Description = "Executes tests for 2D barcodes")]
@@ -70,7 +70,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, format);
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo(contents));
+            Assert.That(b.Value, Is.EqualTo(contents));
         }
 
         [Test(Description = "Executes tests for 1D barcodes with label")]
@@ -99,7 +99,7 @@ namespace AGV.ZXing.Tests
                 var barcode = z.Decode(bytes, format);
                 Assert.That(barcode, Is.Not.Null);
                 var b = barcode.GetValueOrDefault();
-                Assert.That(contents, Is.EqualTo(b.value));
+                Assert.That(contents, Is.EqualTo(b.Value));
             }
         }
 

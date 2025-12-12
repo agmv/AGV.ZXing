@@ -21,7 +21,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "CODE_128");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(contents, Is.EqualTo(b.value));
+            Assert.That(contents, Is.EqualTo(b.Value));
         }
     }
 }

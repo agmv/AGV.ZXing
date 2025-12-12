@@ -3,7 +3,6 @@ using System.Reflection;
 
 namespace AGV.ZXing.Tests
 {
-    [TestFixture]
     public class Utils
     {
         public static byte[] LoadResource(string resourceName)

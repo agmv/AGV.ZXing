@@ -24,7 +24,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo("https://www.outsystems.com"));
+            Assert.That(b.Value, Is.EqualTo("https://www.outsystems.com"));
         }
 
 
@@ -44,7 +44,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            var val1 = MyRegex().Replace(b.value, "");
+            var val1 = MyRegex().Replace(b.Value, "");
             var val2 = MyRegex1().Replace(c.ToString(), "");
             Assert.That(val1, Is.EqualTo(val2));
         }
@@ -63,7 +63,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo(isMeCard ? c.ToMeCardString() : c.ToVCardString()));
+            Assert.That(b.Value, Is.EqualTo(isMeCard ? c.ToMeCardString() : c.ToVCardString()));
         }
 
         [Test(Description = "Execute test for email QR code")]
@@ -77,7 +77,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo("mailto:andre.vieira@outsystems.com"));
+            Assert.That(b.Value, Is.EqualTo("mailto:andre.vieira@outsystems.com"));
         }
 
         [Test(Description = "Execute tests for location QR code")]
@@ -91,7 +91,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo("geo:38.7210876,-9.2390245"));
+            Assert.That(b.Value, Is.EqualTo("geo:38.7210876,-9.2390245"));
         }
 
         [Test(Description = "Execute tests for phone number QR codes")]
@@ -107,7 +107,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo(isFacetime ? "facetime:5553344222" : "tel:5553344222"));
+            Assert.That(b.Value, Is.EqualTo(isFacetime ? "facetime:5553344222" : "tel:5553344222"));
         }
 
         [Test(Description = "Execute tests for SMS QR code")]
@@ -121,7 +121,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo("smsto:5553322444:This is a message"));
+            Assert.That(b.Value, Is.EqualTo("smsto:5553322444:This is a message"));
         }
 
         [Test(Description = "Execute tests for Wifi QR code")]
@@ -136,7 +136,7 @@ namespace AGV.ZXing.Tests
             var barcode = z.Decode(bytes, "QR_CODE");
             Assert.That(barcode, Is.Not.Null);
             var b = barcode.GetValueOrDefault();
-            Assert.That(b.value, Is.EqualTo(w.ToString()));
+            Assert.That(b.Value, Is.EqualTo(w.ToString()));
         }
 
         [System.Text.RegularExpressions.GeneratedRegex("DTSTAMP:.*")]
