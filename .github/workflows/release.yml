@@ -48,7 +48,7 @@ jobs:
       - name: ZIP it
         run: |
           ls -la .
-          tar -czf ZXingLib.zip ZXlingLib
+          tar -czf ZXingLib.zip ./ZXlingLib/
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
