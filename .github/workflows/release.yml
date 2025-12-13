@@ -40,21 +40,24 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download ZIP artifact
+      - name: Download artifact
         uses: actions/download-artifact@v7
         with:
           name: ZXingLib
-          path: artifacts
-      - run: |
-          ls -la artifacts
+          path: ZXingLib
+      - name: ZIP it
+        run: |
+          tar -czf ZXingLib.zip ZXlingLib
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: "Release of version ${{ github.ref_name }}"
-          files: artifacts/ZXingLib.zip
+          files: ZXingLib.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      artifact: ${{ needs.publish.outputs.artifact_url }}
   upload_to_odc:
     runs-on: ubuntu-latest
     needs: release
@@ -79,7 +82,6 @@ jobs:
         with:
           url: ${{ vars.TENANT_URL }}/api/external-libraries/v1/generation-operations
           method: 'POST'
-          # customHeaders: '{ "Authorization": "Bearer ${{ fromJson(steps.access-token.outputs.response).access_token}}" }'
           bearerToken: ${{ fromJson(steps.access-token.outputs.response).access_token }}
           contentType: 'application/json'
-          data: '{ "fileName": "ZXingLib.zip", "highCodeBinaryUri": "${{ needs.publish.outputs.artifact_url }}" }'
+          data: '{ "fileName": "ZXingLib.zip", "highCodeBinaryUri": "${{ needs.release.outputs.artifact }}" }'
