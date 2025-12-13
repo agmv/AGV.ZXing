@@ -7,21 +7,21 @@ namespace AGV.ZXing.Structures
     public struct Metadata
     {
         [OSStructureField(IsMandatory = true, Description = "Barcode metadata key", Length = 50)]
-        public string key;
+        public string Key { get; set; } = "";
 
         [OSStructureField(Description = "Barcode metadata value", Length = 2000)]
-        public string value;
+        public string Value { get; set; } = "";
 
         public Metadata(Metadata m) : this()
         {
-            value = m.value;
-            key = m.key;
+            Value = m.Value;
+            Key = m.Key;
         }
 
         public Metadata(string k, string v) : this()
         {
-            key = k;
-            value = v;
+            Key = k;
+            Value = v;
         }
     }
 }

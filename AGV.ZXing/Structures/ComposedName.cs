@@ -7,32 +7,32 @@ namespace AGV.ZXing.Structures
     public struct ComposedName
     {
         [OSStructureField(Description = "First name", Length = 50)]
-        public string firstName;
+        public string FirstName { get; set; } = "";
         [OSStructureField(Description = "Last name", Length = 50)]
-        public string lastName;
+        public string LastName { get; set; } = "";
         [OSStructureField(Description = "Middle names", Length = 100)]
-        public string middleNames;
+        public string MiddleNames { get; set; } = "";
         [OSStructureField(Description = "Name prefix", Length = 20)]
-        public string prefix;
+        public string Prefix { get; set; } = "";
         [OSStructureField(Description = "Name suffix", Length = 20)]
-        public string suffix;
+        public string Suffix { get; set; } = "";
 
         public ComposedName(string firstName, string lastName, string middleNames = "", string prefix = "", string suffix = "") : this()
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.middleNames = middleNames;
-            this.prefix = prefix;
-            this.suffix = suffix;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.MiddleNames = middleNames;
+            this.Prefix = prefix;
+            this.Suffix = suffix;
         }
 
         public ComposedName(ComposedName n) : this()
         {
-            firstName = n.firstName;
-            lastName = n.lastName;
-            middleNames = n.middleNames;
-            prefix = n.prefix;
-            suffix = n.suffix;
+            FirstName = n.FirstName;
+            LastName = n.LastName;
+            MiddleNames = n.MiddleNames;
+            Prefix = n.Prefix;
+            Suffix = n.Suffix;
         }
     }
 }

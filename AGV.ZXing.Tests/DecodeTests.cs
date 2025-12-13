@@ -74,7 +74,7 @@ namespace AGV.ZXing.Tests
                 Assert.That(barcode.Value, Is.EqualTo(value));
             });
             if (metadatakey != null)
-                Assert.That(barcode.Metadata.Any(x => x.key == metadatakey), Is.True);
+                Assert.That(barcode.Metadata.Any(x => x.Key == metadatakey), Is.True);
 #if DEBUG
             if (barcode.DetectedBarcode != null && barcode.DetectedBarcode.Length > 0)
                 File.WriteAllBytes($"output/decoded/multi1d_{position}_{format}.png", barcode.DetectedBarcode);

@@ -11,81 +11,79 @@ namespace AGV.ZXing.Structures
     public struct CalendarEvent
     {
         [OSStructureField(IsMandatory = true, Description = "Event title", Length = 100)]
-        public string title;
+        public string Title { get; set; } = "";
 
         [OSStructureField(IsMandatory = true, Description = "Indicates if it is an all day event or not")]
-        public bool isAllDay;
+        public bool IsAllDay { get; set; } = false;
 
         [OSStructureField(IsMandatory = true, Description = "Event start date")]
-        public DateTime startDateTime;
+        public DateTime StartDateTime { get; set; } = DateTime.MinValue;
 
         [OSStructureField(IsMandatory = true, Description = "Event end date")]
-        public DateTime endDateTime;
+        public DateTime EndDateTime { get; set; } = DateTime.MinValue;
 
         [OSStructureField(Description = "Event location", Length = 100)]
-        public string? location;
+        public string? Location { get; set; } = null;
 
         [OSStructureField(Description = "Event description", Length = 2000)]
-        public string? description;
+        public string? Description { get; set; } = null;
 
         [OSStructureField(Description = "Event class, e.g. PUBLIC or PRIVATE", Length = 20)]
-        public string? eventClass;
+        public string? EventClass { get; set; } = null;
 
         [OSStructureField(Description = "Event organizer's name", Length = 50)]
-        public string? organizer;
+        public string? Organizer { get; set; } = null;
 
         [OSStructureField(Description = "Event priority. Value between 1 and 4 is Low priority, 5 is Medium priority, and between 6 and 9 is High priority.")]
-        public int priority = 5;
+        public int Priority { get; set; } = 5;
 
         [OSStructureField(Description = "Show as busy in calendar")]
-        public bool showAsBusy = true;
+        public bool ShowAsBusy { get; set; } = true;
 
         public CalendarEvent(string title, bool isAllDay, DateTime start, DateTime end, string? location = "",
                             string? description = "", string? eventClass = "", string? organizer = "", int priority = 5, bool showAsBusy = true) : this()
         {
-            this.title = title;
-            this.isAllDay = isAllDay;
-            startDateTime = start;
-            endDateTime = end;
-            this.location = location;
-            this.description = description;
-            this.eventClass = eventClass;
-            this.organizer = organizer;
-            this.priority = priority;
-            this.showAsBusy = showAsBusy;
+            this.Title = title;
+            this.IsAllDay = isAllDay;
+            StartDateTime = start;
+            EndDateTime = end;
+            this.Location = location;
+            this.Description = description;
+            this.EventClass = eventClass;
+            this.Organizer = organizer;
+            this.Priority = priority;
+            this.ShowAsBusy = showAsBusy;
         }
 
         public CalendarEvent(CalendarEvent e) : this()
         {
-            title = e.title;
-            isAllDay = e.isAllDay;
-            startDateTime = e.startDateTime;
-            endDateTime = e.endDateTime;
-            location = e.location;
-            description = e.description;
-            eventClass = e.eventClass;
-            organizer = e.organizer;
-            priority = e.priority;
-            showAsBusy = e.showAsBusy;
+            Title = e.Title;
+            IsAllDay = e.IsAllDay;
+            StartDateTime = e.StartDateTime;
+            EndDateTime = e.EndDateTime;
+            Location = e.Location;
+            Description = e.Description;
+            EventClass = e.EventClass;
+            Organizer = e.Organizer;
+            Priority = e.Priority;
+            ShowAsBusy = e.ShowAsBusy;
         }
 
         public override readonly string ToString()
         {
-            var start = new CalDateTime(startDateTime, !isAllDay);
-            var end = new CalDateTime(endDateTime, !isAllDay);
-            var organizer = this.organizer != "" ? new Organizer { CommonName = this.organizer } : null;
-
+            var start = new CalDateTime(StartDateTime, !IsAllDay);
+            var end = new CalDateTime(EndDateTime, !IsAllDay);            
             var e = new Ical.Net.CalendarComponents.CalendarEvent
             {
-                Summary = title,
+                Summary = Title,
                 Start = start,
                 End = end,
-                Location = location,
-                Description = description,
-                Class = eventClass,
-                Organizer = organizer,
-                Priority = priority,
-                Transparency = showAsBusy == true ? "OPAQUE" : "TRANSPARENT",
+                Location = Location,
+                Description = Description,
+                Class = EventClass,
+                Organizer = this.Organizer != "" ? new Organizer { CommonName = this.Organizer } : null,
+                Priority = Priority,
+                Transparency = ShowAsBusy == true ? "OPAQUE" : "TRANSPARENT",
                 Uid = null
             };
             var c = new Calendar();
