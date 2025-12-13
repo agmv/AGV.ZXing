@@ -52,9 +52,9 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.ref_name }}
           body: "Release of version ${{ github.ref_name }}"
           files: ZXingLib.zip
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
