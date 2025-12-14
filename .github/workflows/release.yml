@@ -58,9 +58,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          echo ${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip
+          echo 'https://github.com/${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip'
     outputs:
-      release_artifact: ${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip
+      release_artifact: 'https://github.com/${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip'
   upload_to_odc:
     runs-on: ubuntu-latest
     needs: release
