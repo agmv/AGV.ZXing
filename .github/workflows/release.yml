@@ -57,12 +57,13 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          echo ${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip
     outputs:
-      artifact: ${{ needs.publish.outputs.artifact_url }}
+      release_artifact: ${{ github.repository}}/releases/download/${{ github.ref_name }}/ZXingLib.zip
   upload_to_odc:
     runs-on: ubuntu-latest
     needs: release
-    if: false
     steps:
       - name: Get Token Endpoint
         id: token-endpoint
@@ -86,4 +87,4 @@ jobs:
           method: 'POST'
           bearerToken: ${{ fromJson(steps.access-token.outputs.response).access_token }}
           contentType: 'application/json'
-          data: '{ "fileName": "ZXingLib.zip", "highCodeBinaryUri": "${{ needs.release.outputs.artifact }}" }'
+          data: '{ "fileName": "ZXingLib.zip", "highCodeBinaryUri": "${{ needs.release.outputs.release_artifact }}" }'
