@@ -26,7 +26,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/publish
           ls -la
-          tar -cvzf ../ZXingLib.zip -C .
+          tar -cvzf ../ZXingLib.zip .
       - name: Upload ZIP artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
