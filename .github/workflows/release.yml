@@ -19,9 +19,9 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Publish
-        run: dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o publish
-      - run: |
+      - name: Publish & ZIP
+        run: | 
+          dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o publish
           cd publish
           tar -czf ../ZXingLib.zip -C .
       - name: Upload ZIP artifact
