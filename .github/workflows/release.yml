@@ -22,17 +22,12 @@ jobs:
       - name: Publish
         run: | 
           dotnet publish AGV.ZXing -c Release -r linux-x64 --no-self-contained -o publish
-      - name: Create ZIP artifact
-        run: |
-          cd ${{ github.workspace }}/publish
-          ls -la
-          tar -cvzf ../ZXingLib.zip .
-      - name: Upload ZIP artifact
+      - name: Upload artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:            
             name: ZXingLib
-            path: ZXingLib.zip
+            path: publish
       - name: Display Artifact Info
         run: |
           echo "Artifact URL: ${{ steps.upload-artifact.outputs.artifact-url }}"
@@ -49,6 +44,11 @@ jobs:
         with:
           name: ZXingLib
           path: ZXingLib
+      - name: Create Zip
+        run: |
+          cd ZXingLib
+          zip -r ../ZXingLib.zip .
+          cd ..
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
